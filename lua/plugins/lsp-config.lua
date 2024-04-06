@@ -9,7 +9,7 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "tsserver", "biome" },
+				ensure_installed = { "lua_ls", "tsserver", "biome", "rust_analyzer" },
 			})
 		end,
 	},
@@ -25,9 +25,10 @@ return {
 			lspconfig.tsserver.setup({
 				capabilities = capabilities,
 			})
-			lspconfig.biome.setup({
+			lspconfig.rust_analyzer.setup({
 				capabilities = capabilities,
 			})
+
 
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
