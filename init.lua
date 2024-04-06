@@ -16,4 +16,3 @@ local opts = {}
 
 require("vim-options")
 require("lazy").setup("plugins")
-require("nvim-tree").setup()
