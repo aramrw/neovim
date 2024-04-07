@@ -2,6 +2,7 @@
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
+-- set line numbers
 vim.cmd("set number")
 
 vim.g.loaded_netrw = 1
@@ -12,3 +13,5 @@ vim.g.mapleader = " "
 
 -- enable 24-bit color
 vim.opt.termguicolors = true
+
+

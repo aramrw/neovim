@@ -2,7 +2,7 @@ return {
 	"CopilotC-Nvim/CopilotChat.nvim",
 	branch = "canary",
 	dependencies = {
-		{ "github/copilot.lua" },  -- or github/copilot.vim
+		{ "github/copilot.vim" },  -- or github/copilot.vim
 		{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
 	},
 	config = function()
@@ -10,5 +10,6 @@ return {
 		-- Use a function for the keymapping
 		vim.keymap.set("v", "<leader>mo", ":CopilotChat ", {})
 		vim.keymap.set("n", "<leader>mo", ":CopilotChat ", {})
+		vim.keymap.set("n", "<leader>mc", ":CopilotChatToggle<CR>", {})
 	end,
 }
