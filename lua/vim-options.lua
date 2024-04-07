@@ -14,4 +14,5 @@ vim.g.mapleader = " "
 -- enable 24-bit color
 vim.opt.termguicolors = true
 
-
+-- set <c-s> to save
+vim.cmd("nnoremap <c-s> :w<cr>")
