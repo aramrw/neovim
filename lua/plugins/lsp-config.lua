@@ -22,8 +22,17 @@ return {
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
 			})
-						lspconfig.rust_analyzer.setup({
-				capabilities = capabilities,
+			lspconfig.rust_analyzer.setup({
+				settings = {
+					["rust-analyzer"] = {
+						check = {
+							command = "clippy",
+						},
+						procMacro = {
+							enable = true,
+						},
+					},
+				},
 			})
 			lspconfig.tailwindcss.setup({
 				capabilities = capabilities,
