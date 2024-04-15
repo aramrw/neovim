@@ -6,5 +6,6 @@ return {
 			open_mapping = [[<C-l>]],
 			autochdir = true,
 		})
+		vim.keymap.set("n", "<leader>tt", ":2ToggleTerm<CR>", {})
 	end,
 }

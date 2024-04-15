@@ -16,3 +16,6 @@ vim.opt.termguicolors = true
 
 -- set <c-s> to save
 vim.cmd("nnoremap <c-s> :w<cr>")
+
+-- set <leader>bd to close buffer
+vim.cmd("nnoremap <leader>bd :bd!<cr>")
