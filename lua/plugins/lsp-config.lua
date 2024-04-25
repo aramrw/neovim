@@ -43,8 +43,14 @@ return {
 				},
 			})
 			require("lspconfig").clangd.setup({
-				on_attach = on_attach,
 				capabilities = capabilities,
+				-- settings = {
+				-- 	workspace = {
+				-- 		library = {
+				-- 			["F:/msys64/mingw64/include/AL"] = true,
+				-- 		},
+				-- 	},
+				-- },
 				cmd = {
 					"clangd",
 					"--offset-encoding=utf-16",
