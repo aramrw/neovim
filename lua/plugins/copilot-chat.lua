@@ -19,6 +19,5 @@ return {
 		vim.keymap.set("v", "<leader>mo", ":CopilotChat ", {})
 		vim.keymap.set("n", "<leader>mo", ":CopilotChat ", {})
 		vim.keymap.set("n", "<leader>mc", ":CopilotChatToggle<CR>", {})
-		vim.keymap.set("n", "<leader>mr", ":CopilotChatReset<CR>", {})
 	end,
 }
