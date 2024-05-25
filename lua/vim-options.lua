@@ -25,3 +25,6 @@ vim.cmd("tnoremap <leader>bd <C-\\><C-n>:bd!<cr>")
 
 -- disable copilot on startup
 vim.cmd([[ autocmd VimEnter * Copilot disable ]])
+
+-- relative line numbers
+vim.wo.relativenumber = true
