@@ -44,13 +44,6 @@ return {
 			})
 			require("lspconfig").clangd.setup({
 				capabilities = capabilities,
-				-- settings = {
-				-- 	workspace = {
-				-- 		library = {
-				-- 			["F:/msys64/mingw64/include/AL"] = true,
-				-- 		},
-				-- 	},
-				-- },
 				cmd = {
 					"clangd",
 					"--offset-encoding=utf-16",
@@ -67,6 +60,7 @@ return {
 			})
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+			vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
 		end,
 	},
