@@ -28,3 +28,6 @@ vim.cmd([[ autocmd VimEnter * Copilot disable ]])
 
 -- relative line numbers
 vim.wo.relativenumber = true
+
+vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
+vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
