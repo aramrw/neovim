@@ -36,8 +36,8 @@ return {
 	config = function()
 		require("startup").setup({ theme = "startify" })
 		vim.g.startup_bookmarks = {
-			["A"] = "f:/programming/rust",
-			["B"] = "c:/users/arami/appdata/local/nvim/lua",
+			["A"] = "f/programming/rust",
+			["B"] = "/mnt/f/programming/rust",
 		}
 	end,
 }

@@ -14,7 +14,7 @@ return {
 					"tsserver",
 					"rust_analyzer",
 					"tailwindcss",
-					"clangd",
+					-- "clangd",
 					"emmet_language_server",
 					"jsonls",
 				},
@@ -42,13 +42,13 @@ return {
 					},
 				},
 			})
-			require("lspconfig").clangd.setup({
-				capabilities = capabilities,
-				cmd = {
-					"clangd",
-					"--offset-encoding=utf-16",
-				},
-			})
+			-- require("lspconfig").clangd.setup({
+			-- 	capabilities = capabilities,
+			-- 	cmd = {
+			-- 		"clangd",
+			-- 		"--offset-encoding=utf-16",
+			-- 	},
+			-- })
 			lspconfig.tailwindcss.setup({
 				capabilities = capabilities,
 			})
