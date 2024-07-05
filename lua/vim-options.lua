@@ -5,7 +5,7 @@ vim.cmd("set shiftwidth=2")
 -- set line numbers
 vim.cmd("set number")
 -- set smart case search
-vim.cmd("set smartcase")
+vim.cmd("set ignorecase")
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
