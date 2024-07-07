@@ -1,12 +1,12 @@
 return {
-  "folke/trouble.nvim",
-  opts = {}, -- for default options, refer to the configuration section for custom setup.
-  cmd = "Trouble",
-  keys = {
-    {
-      "<S-m>",
-      "<cmd>Trouble diagnostics toggle focus=true<cr>",
-      desc = "Diagnostics (Trouble)",
-    },
-  },
+	"folke/trouble.nvim",
+	cmd = "Trouble",
+	keys = {
+		{
+			"<S-m>",
+			"<cmd>Trouble diagnostics toggle focus=true win.type=float <cr>",
+			desc = "Diagnostics (Trouble)",
+		},
+	},
+	opts = {},
 }
