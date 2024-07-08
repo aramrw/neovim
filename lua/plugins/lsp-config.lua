@@ -97,33 +97,7 @@ return {
 				capabilities = capabilities,
 			})
 
-			-- local border = {
-			-- 	-- TL
-			-- 	{ "┃", "FloatBorder" },
-			-- 	-- T
-			-- 	{ "▔", "FloatBorder" },
-			-- 	-- TR
-			-- 	{ "┃", "FloatBorder" },
-			-- 	-- R
-			-- 	{ "┃", "FloatBorder" },
-			-- 	-- BR
-			-- 	{ "┃", "FloatBorder" },
-			-- 	-- B
-			-- 	{ "▁", "FloatBorder" },
-			-- 	-- BL
-			-- 	{ "┃", "FloatBorder" },
-			-- 	-- L
-			-- 	{ "┃", "FloatBorder" },
-			-- }
-			--
-			-- local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-			-- function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-			-- 	opts = opts or {}
-			-- 	opts.border = opts.border or border
-			-- 	return orig_util_open_floating_preview(contents, syntax, opts, ...)
-			-- end
-			--
-			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+			--vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
