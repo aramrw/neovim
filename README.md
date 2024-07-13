@@ -1,1 +1,1 @@
-Neovim is straight trash, cant wait till zed is out so I never have to use this sht again
+Neovim is pretty good, zed might be the goat tho, we don't know yet
