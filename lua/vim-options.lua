@@ -31,3 +31,31 @@ vim.wo.relativenumber = true
 
 vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
 vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
+
+local options = {
+	smartindent = true,
+	splitbelow = true,
+	splitright = true,
+	signcolumn = "yes",
+}
+
+for k, v in pairs(options) do
+	vim.opt[k] = v
+end
+
+-- hightlight yank
+vim.cmd [[
+augroup highlight_yank
+autocmd!
+au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=200})
+augroup END
+]]
+
+vim.cmd([[
+  " Remap <C-Insert> to copy to system clipboard
+  nnoremap <C-Insert> "+y
+  vnoremap <C-Insert> "+y
+  " Remap <S-Insert> to paste from system clipboard
+  nnoremap <S-Insert> "+p
+  inoremap <S-Insert> <C-R>+
+]])
