@@ -5,8 +5,15 @@ return {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",
 		"MunifTanjim/nui.nvim",
+		"3rd/image.nvim",
 	},
 	config = function()
+		require("neo-tree").setup({
+			window = {
+				position = "left",
+				width = 27,
+			}
+		})
 		vim.keymap.set("n", "<C-n>", ":Neotree toggle reveal_force_cwd left<CR>", {})
 		vim.keymap.set("n", "<leader>bf", ":Neotree buffers reveal float<CR>", {})
 	end,
