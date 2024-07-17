@@ -28,6 +28,7 @@ return {
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
 			lspconfig.rust_analyzer.setup({
+				capabilities = capabilities,
 				settings = {
 					["rust-analyzer"] = {
 						check = {
@@ -51,10 +52,16 @@ return {
 			})
 			require("lspconfig").clangd.setup({
 				capabilities = capabilities,
-				-- cmd = {
-				-- 	"clangd",
-				-- 	"--offset-encoding=utf-16",
-				-- },
+				cmd = {
+					"clangd",
+					"--background-index",
+					"--clang-tidy",
+					"--header-insertion=iwyu",
+					"--completion-style=detailed",
+					"--function-arg-placeholders",
+					"--fallback-style=llvm",
+					"--offset-encoding=utf-16",
+				},
 			})
 			lspconfig.tailwindcss.setup({
 				capabilities = capabilities,
