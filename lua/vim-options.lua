@@ -32,6 +32,23 @@ vim.wo.relativenumber = true
 vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
 vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
 
+-- Function to check if there are diagnostics and open the float if they exist
+local function open_diagnostics_if_exist()
+	-- If we find a floating window, close it.
+	local found_float = false
+	local diagnostics = vim.diagnostic.get()
+	if #diagnostics > 0 then
+		vim.diagnostic.open_float(nil, {
+			scope = "line", -- or "line"
+			border = "rounded", -- or "single", "double", "shadow", "none"
+			relative = "editor"
+		})
+	end
+end
+
+-- Map a key to the function
+vim.keymap.set('n', '<Enter>', open_diagnostics_if_exist, { noremap = true, silent = true })
+
 local options = {
 	smartindent = true,
 	splitbelow = true,
