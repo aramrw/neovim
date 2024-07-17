@@ -20,6 +20,14 @@ return {
 				references_float = {
 					mode = "lsp_references",
 					win = { type = "float" },
+					win = {
+						type = "float",
+						relative = "editor",
+						border = "rounded",
+						size = { width = 0.8, height = 0.2 },
+						zindex = 200,
+						wrap = true,
+					},
 				},
 			},
 			open_no_results = true,
