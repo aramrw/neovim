@@ -65,6 +65,15 @@ return {
 }
 
 -- return {
+--   "xero/miasma.nvim",
+--   lazy = false,
+--   priority = 1000,
+--   config = function()
+--     vim.cmd("colorscheme miasma")
+--   end,
+-- }
+
+-- return {
 -- 	'sainnhe/gruvbox-material',
 -- 	lazy = false,
 -- 	priority = 1000,
