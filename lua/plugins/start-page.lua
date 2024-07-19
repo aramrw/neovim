@@ -1,43 +1,45 @@
--- return {
---   "goolord/alpha-nvim",
---   dependencies = {
---     "nvim-tree/nvim-web-devicons",
---   },
---
---   config = function()
---     local alpha = require("alpha")
---     local dashboard = require("alpha.themes.startify")
---
---     dashboard.section.header.val = {
---       [[                                                                       ]],
---       [[                                                                       ]],
---       [[                                                                       ]],
---       [[                                                                       ]],
---       [[                                                                     ]],
---       [[       ████ ██████           █████      ██                     ]],
---       [[      ███████████             █████                             ]],
---       [[      █████████ ███████████████████ ███   ███████████   ]],
---       [[     █████████  ███    █████████████ █████ ██████████████   ]],
---       [[    █████████ ██████████ █████████ █████ █████ ████ █████   ]],
---       [[  ███████████ ███    ███ █████████ █████ █████ ████ █████  ]],
---       [[ ██████  █████████████████████ ████ █████ █████ ████ ██████ ]],
---       [[                                                                       ]],
---       [[                                                                       ]],
---       [[                                                                       ]],
---     }
---
---     alpha.setup(dashboard.opts)
---   end,
--- }
-
 return {
-	"startup-nvim/startup.nvim",
-	requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+	'nvimdev/dashboard-nvim',
+	event = 'VimEnter',
 	config = function()
-		require("startup").setup({ theme = "startify" })
-		vim.g.startup_bookmarks = {
-			["A"] = "f:/programming/rust",
-			["B"] = "c:/users/arami/appdata/local/nvim/lua",
-		}
+		require('dashboard').setup {
+			theme = 'hyper',
+			config = {
+				week_header = {
+					enable = true,
+				},
+				shortcut = {
+					{ desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+					{
+						icon = ' ',
+						icon_hl = '@variable',
+						desc = 'Programming Files',
+						group = 'Label',
+						action = 'cd f:\\programming\\rust | Neotree toggle',
+						key = 'a',
+					},
+					{
+						icon = ' ',
+						icon_hl = '@variable',
+						desc = 'Lua Files',
+						group = 'Label',
+						action = 'cd c:\\users\\arami\\appdata\\local\\nvim | Neotree toggle',
+						key = 'b',
+					},
+					-- {
+					-- 	desc = ' Apps',
+					-- 	group = 'DiagnosticHint',
+					-- 	action = 'Telescope app',
+					-- 	key = 'a',
+					-- },
+					-- {
+					-- 	desc = ' dotfiles',
+					-- 	group = 'Number',
+					-- 	action = 'Telescope dotfiles',
+					-- 	key = 'd',
+					-- },
+				},
+			}, }
 	end,
+	dependencies = { { 'nvim-tree/nvim-web-devicons' } }
 }
