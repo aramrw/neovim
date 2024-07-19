@@ -16,7 +16,7 @@ return {
 						desc = 'Programming Files',
 						group = 'Label',
 						action = 'cd f:\\programming\\rust | Neotree toggle',
-						key = 'a',
+						key = 'A',
 					},
 					{
 						icon = ' ',
@@ -24,7 +24,7 @@ return {
 						desc = 'Lua Files',
 						group = 'Label',
 						action = 'cd c:\\users\\arami\\appdata\\local\\nvim | Neotree toggle',
-						key = 'b',
+						key = 'B',
 					},
 					-- {
 					-- 	desc = ' Apps',
