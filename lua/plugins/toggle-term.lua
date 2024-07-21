@@ -18,6 +18,15 @@ return {
 		config = require("toggleterm").setup({
 			open_mapping = [[<C-l>]],
 			autochdir = true,
+			auto_scroll = false,
+			direction = "float",
+			shading_facto = "-50",
+			-- shading_ratio = '',
+			float_opts = {
+				border = "curved",
+				title_pos = "center",
+				zindex = 500,
+			}
 		})
 		vim.keymap.set("n", "<leader>tt", ":2ToggleTerm<CR>", {})
 	end,
