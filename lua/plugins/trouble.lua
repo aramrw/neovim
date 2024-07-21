@@ -3,6 +3,9 @@ return {
 	cmd = "Trouble",
 	config = function()
 		require("trouble").setup({
+			follow = false,
+			focus = true,
+			open_no_results = true,
 			modes = {
 				diagnostic_float = {
 					mode = "diagnostics",
@@ -38,19 +41,23 @@ return {
 					},
 				},
 			},
-			open_no_results = true,
+			keys = {
+				["<cr>"] = "jump_close",
+			}
 		})
 	end,
 	keys = {
+		["<cr>"] = "jump_close",
 		{
 			"<S-m>",
-			"<cmd>Trouble diagnostic_float toggle focus=true<cr>",
-			desc = "Diagnostics (Trouble)"
+			"<cmd>Trouble diagnostic_float toggle<cr>",
+			"Diagnostics",
 		},
 		{
 			"<leader>gr",
-			"<cmd>Trouble references_float toggle focus=true<cr>",
-			desc = "References (Trouble)"
-		},
+			"<cmd>Trouble references_float toggle<cr>",
+			"References",
+		}
 	},
+
 }
