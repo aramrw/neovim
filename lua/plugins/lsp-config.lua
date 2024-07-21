@@ -3,7 +3,7 @@ return {
 		"williamboman/mason.nvim",
 		config = function()
 			require("mason").setup()
-		end,
+		end
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
@@ -27,6 +27,33 @@ return {
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
+			-- sometimes looks for the lsp in the wrong directory.
+			-- solved by adding an absolute path to the language servers that fail regularly.
+			local bin_path = "C:/Users/arami/AppData/Local/nvim-data/mason/bin/"
+			lspconfig.lua_ls.setup({
+				capabilities = capabilities,
+				cmd = { bin_path .. "lua-language-server.cmd" },
+				on_init = function(client)
+					local path = client.workspace_folders[1].name
+					if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+						return
+					end
+
+					client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+						runtime = {
+							version = 'LuaJIT'
+						},
+						-- Make the server aware of Neovim runtime files
+						workspace = {
+							checkThirdParty = true,
+							library = vim.api.nvim_get_runtime_file("", true)
+						}
+					})
+				end,
+				settings = {
+					Lua = {}
+				}
+			})
 			lspconfig.rust_analyzer.setup({
 				capabilities = capabilities,
 				settings = {
@@ -68,32 +95,11 @@ return {
 			})
 			lspconfig.emmet_language_server.setup({
 				capabilities = capabilities,
+				cmd = { bin_path .. 'emmet-language-server', '--stdio' },
 			})
 			lspconfig.jsonls.setup({
 				capabilities = capabilities,
-			})
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities,
-				on_init = function(client)
-					local path = client.workspace_folders[1].name
-					if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-						return
-					end
-
-					client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-						runtime = {
-							version = 'LuaJIT'
-						},
-						-- Make the server aware of Neovim runtime files
-						workspace = {
-							checkThirdParty = false,
-							library = vim.api.nvim_get_runtime_file("", true)
-						}
-					})
-				end,
-				settings = {
-					Lua = {}
-				}
+				cmd = { bin_path .. 'vscode-json-language-server', '--stdio' },
 			})
 			-- vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
