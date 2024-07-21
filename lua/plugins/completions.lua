@@ -18,6 +18,7 @@ return {
 			cmp.setup({
 				sorting = {
 					comparators = {
+						cmp.config.compare.order,
 						cmp.config.compare.offset,
 						cmp.config.compare.exact,
 						cmp.config.compare.score,
