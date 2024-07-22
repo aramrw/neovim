@@ -39,7 +39,7 @@ local function open_diagnostics_if_exist()
 	local diagnostics = vim.diagnostic.get()
 	if #diagnostics > 0 then
 		vim.diagnostic.open_float(nil, {
-			scope = "line", -- or "line"
+			scope = "line",  -- or "line"
 			border = "rounded", -- or "single", "double", "shadow", "none"
 			relative = "editor"
 		})
@@ -75,4 +75,12 @@ vim.cmd([[
   " Remap <S-Insert> to paste from system clipboard
   nnoremap <S-Insert> "+p
   inoremap <S-Insert> <C-R>+
+]])
+
+vim.cmd([[
+  augroup remember_folds
+    autocmd!
+    au BufWinLeave ?* mkview 1
+    au BufWinEnter ?* silent! loadview 1
+  augroup END
 ]])
