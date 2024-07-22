@@ -2,7 +2,9 @@ return {
 	{
 		"williamboman/mason.nvim",
 		config = function()
-			require("mason").setup()
+			require("mason").setup(
+				{ PATH = "append" }
+			)
 		end
 	},
 	{
@@ -56,24 +58,35 @@ return {
 			})
 			lspconfig.rust_analyzer.setup({
 				capabilities = capabilities,
+				cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
 				settings = {
 					["rust-analyzer"] = {
 						check = {
 							command = "clippy",
 						},
-						cargo = {
-							buildScripts = {
-								enable = true,
-							},
+						extraArgs = {
+							"--",
+							"--no-deps",
+							"-Dclippy::correctness",
+							"-Dclippy::complexity",
+							"-Wclippy::perf",
+							"-Wclippy::pedantic",
+							"-Wclippy::nursery",
 						},
-						procMacro = {
-							enable = true,
-						},
+						-- procMacro = {
+						-- 	enable = true,
+						-- },
 						diagnostics = {
 							useRustcErrorCode = { enable = true },
 							styleLints = { enable = true },
 							experimental = { enable = true },
 						}
+						-- cargo = {
+						-- 	buildScripts = {
+						-- 		enable = true,
+						-- 	},
+						-- },
+						--  assist = {}
 					},
 				},
 			})
