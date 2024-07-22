@@ -5,8 +5,19 @@ local colorschemes = {
 	"catppuccin",
 	"evergarden",
 	"kanagawa",
+	"kanagawa-paper",
 	"miasma",
 	"gruvbox-material",
+}
+
+-- Lua Line themes to map to editor themes how I want
+local lualine_themes = {
+	["catppuccin"] = "auto",
+	["evergarden"] = "auto",
+	["kanagawa"] = "gruvbox",
+	["kanagawa-paper"] = "auto",
+	["miasma"] = "auto",
+	["gruvbox-material"] = "auto",
 }
 
 -- Function to read the last selected color scheme from the file
@@ -29,7 +40,7 @@ local function write_colorscheme(colorscheme)
 	end
 end
 
--- Function to switch to the selected color scheme
+-- Function to switch to the selected color scheme and set the corresponding lualine theme
 local function select_colorscheme()
 	vim.ui.select(colorschemes, {
 		prompt = 'Select colorscheme:',
@@ -40,6 +51,12 @@ local function select_colorscheme()
 		if choice then
 			vim.cmd.colorscheme(choice)
 			write_colorscheme(choice)
+			local lualine_theme = lualine_themes[choice]
+			require('lualine').setup({
+				options = {
+					theme = lualine_theme
+				}
+			})
 		end
 	end)
 end
@@ -49,6 +66,12 @@ local function persist_colorscheme()
 	local last_colorscheme = read_colorscheme()
 	if last_colorscheme then
 		vim.cmd.colorscheme(last_colorscheme)
+		local lualine_theme = lualine_themes[last_colorscheme]
+		require('lualine').setup({
+			options = {
+				theme = lualine_theme
+			}
+		})
 	end
 end
 
@@ -59,6 +82,18 @@ vim.keymap.set('n', '<leader>cs', select_colorscheme, { noremap = true, silent =
 
 -- Plugin setup
 return {
+	-- setup lua line
+	{
+		'nvim-lualine/lualine.nvim',
+		config = function()
+			require('lualine').setup({
+				-- options = {
+				-- 	theme = 'auto'
+				-- }
+			})
+		end
+	},
+	-- setup colorschemes
 	{
 		"catppuccin/nvim",
 		lazy = false,
@@ -120,6 +155,30 @@ return {
 			})
 		end,
 	},
+	"sho-87/kanagawa-paper.nvim",
+	name = "kanagawa-paper",
+	priority = 1000,
+	config = function()
+		require('kanagawa-paper').setup({
+			undercurl = true,
+			transparent = false,
+			gutter = false,
+			-- disabled when transparent
+			dimInactive = true,
+			terminalColors = true,
+			commentStyle = { italic = true },
+			functionStyle = { italic = false },
+			keywordStyle = { italic = false, bold = false },
+			statementStyle = { italic = false, bold = false },
+			typeStyle = { italic = false },
+			-- override default palette and theme colors
+			colors = { theme = {}, palette = {} },
+			-- override highlight groups
+			overrides = function()
+				return {}
+			end,
+		})
+	end,
 	{
 		"xero/miasma.nvim",
 		lazy = false,
