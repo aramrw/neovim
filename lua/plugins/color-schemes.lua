@@ -8,6 +8,8 @@ local colorschemes = {
 	"kanagawa-paper",
 	"miasma",
 	"gruvbox-material",
+	"rose-pine",
+	"nordic",
 }
 
 -- Lua Line themes to map to editor themes how I want
@@ -18,6 +20,8 @@ local lualine_themes = {
 	["kanagawa-paper"] = "auto",
 	["miasma"] = "auto",
 	["gruvbox-material"] = "auto",
+	["rose-pine"] = "auto",
+	["nordic"] = "auto",
 }
 
 -- Function to read the last selected color scheme from the file
@@ -100,7 +104,17 @@ return {
 		name = "catppuccin",
 		priority = 1000,
 		config = function()
-			-- Initial colorscheme setup, if needed
+			require("catppuccin").setup({
+				flavour = "mocha", -- latte, frappe, macchiato, mocha
+				background = { -- :h background
+					light = "latte",
+					dark = "mocha",
+				},
+				integrations = {
+					neotree = true,
+					nvimtree = false,
+				}
+			})
 		end,
 	},
 	{
@@ -108,7 +122,7 @@ return {
 		name = "evergarden",
 		priority = 1000,
 		config = function()
-			config = require("evergarden").setup({
+			require("evergarden").setup({
 				transparent_background = true,
 				contrast_dark = "hard", -- 'hard'|'medium'|'soft'
 				override_terminal = false,
@@ -128,12 +142,77 @@ return {
 		name = "kanagawa",
 		priority = 1000,
 		config = function()
-			config = require("kanagawa").setup({
-				theme = "wave", -- Load "wave" theme when 'background' option is not set
+			require("kanagawa").setup({
+				undercurl = true,
+				commentStyle = { italic = true },
+				keywordStyle = { italic = true },
+				statementStyle = { bold = true },
+				terminalColors = true,
+				theme = "wave",
+				background = {
+					dark = "dragon",
+					light = "lotus"
+				},
+				colors = {
+					theme = {
+						all = {
+							ui = {
+								bg_gutter = "#151515",
+								dragonRed = "red"
+							},
+							-- syn = {
+							-- 	operator = "#FF4B4B",
+							-- 	preproc  = "#FF4B4B",
+							-- 	special2 = "#FF4B4B",
+							-- 	special3 = "#FF4B4B",
+							-- }
+						}
+					}
+				},
+				overrides = function(colors)
+					local theme = colors.theme
+					local diagnostics = {
+						["Error"] = "#E05A5A",
+						["Warn"] = "#F8CD7D",
+						["Info"] = "#7DC1F8",
+						["Hint"] = "#8D99F6",
+					}
+					return {
+						NormalFloat = { bg = "none" },
+						FloatBorder = { bg = "none" },
+						FloatTitle = { bg = "none" },
+						WinSeparator = { fg = "#333333", bg = "#121212" },
+						DiagnosticError = { fg = diagnostics.Error },
+						DiagnosticFloatingError = { fg = diagnostics.Error },
+						DiagnosticSignError = { fg = diagnostics.Error },
+
+						NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+					}
+				end
+			})
+		end
+	},
+	{
+		"sho-87/kanagawa-paper.nvim",
+		name = "kanagawa-paper",
+		priority = 1000,
+		config = function()
+			require('kanagawa-paper').setup({
 				background = { -- map the value of 'background' option to a theme
 					dark = "dragon", -- try "dragon" !
 					light = "lotus",
 				},
+				undercurl = true,
+				transparent = true,
+				gutter = false,
+				-- dimInactive = true, -- disabled when transparent
+				terminalColors = true,
+				commentStyle = { italic = true },
+				functionStyle = { italic = false },
+				keywordStyle = { italic = false, bold = false },
+				statementStyle = { italic = false, bold = false },
+				typeStyle = { italic = false },
+				colors = { theme = {}, palette = {} }, -- override default palette and theme colors
 				overrides = function(colors)
 					local theme = colors.theme
 					return {
@@ -141,44 +220,12 @@ return {
 						FloatBorder = { bg = "none" },
 						FloatTitle = { bg = "none" },
 
-						-- Save an hlgroup with dark background and dimmed foreground
-						-- so that you can use it where your still want darker windows.
-						-- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
-						NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
-
-						-- Popular plugins that open floats will link to NormalFloat by default;
-						-- set their background accordingly if you wish to keep them dark and borderless
-						LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
-						MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+						-- NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
 					}
-				end,
+				end
 			})
 		end,
 	},
-	"sho-87/kanagawa-paper.nvim",
-	name = "kanagawa-paper",
-	priority = 1000,
-	config = function()
-		require('kanagawa-paper').setup({
-			undercurl = true,
-			transparent = false,
-			gutter = false,
-			-- disabled when transparent
-			dimInactive = true,
-			terminalColors = true,
-			commentStyle = { italic = true },
-			functionStyle = { italic = false },
-			keywordStyle = { italic = false, bold = false },
-			statementStyle = { italic = false, bold = false },
-			typeStyle = { italic = false },
-			-- override default palette and theme colors
-			colors = { theme = {}, palette = {} },
-			-- override highlight groups
-			overrides = function()
-				return {}
-			end,
-		})
-	end,
 	{
 		"xero/miasma.nvim",
 		lazy = false,
@@ -199,5 +246,42 @@ return {
 			vim.g.gruvbox_material_enable_italic = true
 		end,
 	},
-
+	{
+		"rose-pine/neovim",
+		name = "rose-pine",
+		config = function()
+			require("rose-pine").setup({
+				dark_variant = "main", -- main, moon, or dawn
+				dim_inactive_windows = false,
+				extend_background_behind_borders = true,
+				enable = {
+					terminal = true,
+					legacy_highlights = false, -- Improve compatibility for previous versions of Neovim
+					migrations = true,
+				},
+			})
+		end,
+	},
+	{
+		'AlexvZyl/nordic.nvim',
+		lazy = false,
+		priority = 1000,
+		config = function()
+			local palette = require 'nordic.colors'
+			require("nordic").setup({
+				bright_border = true,
+				reduced_blue = true,
+				italic_comments = true,
+				telescope = {
+					style = "classic"
+				},
+				-- override = {
+				-- 	Normal = {
+				-- 		bg = palette.black0,
+				-- 		undercurl = true,
+				-- 	}
+				-- }
+			})
+		end
+	},
 }
