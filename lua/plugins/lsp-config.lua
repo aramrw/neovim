@@ -14,11 +14,11 @@ return {
 				ensure_installed = {
 					"lua_ls",
 					"tsserver",
-					"rust_analyzer",
 					"tailwindcss",
 					"clangd",
 					"emmet_language_server",
 					"jsonls",
+					"taplo",
 				},
 			})
 		end,
@@ -113,6 +113,10 @@ return {
 			lspconfig.jsonls.setup({
 				capabilities = capabilities,
 				cmd = { bin_path .. 'vscode-json-language-server', '--stdio' },
+			})
+			lspconfig.taplo.setup({
+				capabilities = capabilities,
+				cmd = { bin_path .. 'taplo', 'lsp', 'stdio' },
 			})
 			-- vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
