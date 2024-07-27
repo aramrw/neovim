@@ -7,6 +7,9 @@ vim.cmd("set number")
 -- set smart case search
 vim.cmd("set ignorecase")
 
+-- dont automatically switch to the dir when a file gets opened
+--vim.opt.autochdir = false
+
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -77,10 +80,10 @@ vim.cmd([[
   inoremap <S-Insert> <C-R>+
 ]])
 
-vim.cmd([[
-  augroup remember_folds
-    autocmd!
-    au BufWinLeave ?* mkview 1
-    au BufWinEnter ?* silent! loadview 1
-  augroup END
-]])
+-- vim.cmd([[
+--   augroup remember_folds
+--     autocmd!
+--     au BufWinLeave ?* mkview 1
+--     au BufWinEnter ?* silent! loadview 1
+--   augroup END
+-- ]])
