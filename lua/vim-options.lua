@@ -27,7 +27,7 @@ vim.cmd("nnoremap <leader>bd :bd!<cr>")
 vim.cmd("tnoremap <leader>bd <C-\\><C-n>:bd!<cr>")
 
 -- disable copilot on startup
-vim.cmd([[ autocmd VimEnter * Copilot disable ]])
+-- vim.cmd([[ autocmd VimEnter * Copilot disable ]])
 
 -- relative line numbers
 vim.wo.relativenumber = true
@@ -35,32 +35,44 @@ vim.wo.relativenumber = true
 vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
 vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
 
--- Function to check if there are diagnostics and open the float if they exist
 local function open_diagnostics_if_exist()
-	-- If we find a floating window, close it.
-	local found_float = false
+	-- Get diagnostics for the current buffer
 	local diagnostics = vim.diagnostic.get()
-	if #diagnostics > 0 then
-		vim.diagnostic.open_float(nil, {
-			scope = "line",  -- or "line"
-			border = "rounded", -- or "single", "double", "shadow", "none"
-			relative = "editor"
-		})
+
+	-- Return early if there are no diagnostics
+	if #diagnostics == 0 then
+		return
 	end
+
+	-- Open a floating diagnostic window if there are diagnostics
+	vim.diagnostic.open_float(nil, {
+		scope = "line",
+		border = "rounded",
+		relative = "editor",
+		format = function(diagnostic)
+			if diagnostic.source == 'rustc'
+					and diagnostic.user_data.lsp.data ~= nil
+			then
+				return diagnostic.user_data.lsp.data.rendered
+			else
+				return diagnostic.message
+			end
+		end,
+	})
 end
 
--- Map a key to the function
+-- Map a key to the diagnostics
 vim.keymap.set('n', '<Enter>', open_diagnostics_if_exist, { noremap = true, silent = true })
 
 local options = {
-	smartindent = true,
-	splitbelow = true,
-	splitright = true,
-	signcolumn = "yes",
+  smartindent = true,
+  splitbelow = true,
+  splitright = true,
+  signcolumn = "yes",
 }
 
 for k, v in pairs(options) do
-	vim.opt[k] = v
+  vim.opt[k] = v
 end
 
 -- hightlight yank
