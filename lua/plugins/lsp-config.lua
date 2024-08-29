@@ -13,12 +13,13 @@ return {
 			require("mason-lspconfig").setup({
 				ensure_installed = {
 					"lua_ls",
-					"tsserver",
 					"tailwindcss",
 					"clangd",
 					"emmet_language_server",
 					"jsonls",
 					"taplo",
+					"html",
+					"svelte"
 				},
 			})
 		end,
@@ -58,7 +59,8 @@ return {
 			})
 			lspconfig.rust_analyzer.setup({
 				capabilities = capabilities,
-				cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
+				-- cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
+				cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
 				settings = {
 					["rust-analyzer"] = {
 						check = {
@@ -73,24 +75,18 @@ return {
 							"-Wclippy::pedantic",
 							"-Wclippy::nursery",
 						},
-						-- procMacro = {
-						-- 	enable = true,
-						-- },
+						procMacro = {
+							enable = true,
+						},
 						diagnostics = {
 							useRustcErrorCode = { enable = true },
 							styleLints = { enable = true },
 							experimental = { enable = true },
 						}
-						-- cargo = {
-						-- 	buildScripts = {
-						-- 		enable = true,
-						-- 	},
-						-- },
-						--  assist = {}
 					},
 				},
 			})
-			require("lspconfig").clangd.setup({
+			lspconfig.clangd.setup({
 				capabilities = capabilities,
 				cmd = {
 					"clangd",
@@ -114,14 +110,23 @@ return {
 				capabilities = capabilities,
 				cmd = { bin_path .. 'vscode-json-language-server', '--stdio' },
 			})
+			lspconfig.html.setup({
+				capabilities = capabilities,
+				cmd = { bin_path .. 'vscode-html-language-server', '--stdio' },
+			})
+			lspconfig.svelte.setup({
+				capabilities = capabilities,
+				cmd = { bin_path .. 'svelteserver', '--stdio' },
+			})
 			lspconfig.taplo.setup({
 				capabilities = capabilities,
 				cmd = { bin_path .. 'taplo', 'lsp', 'stdio' },
 			})
-			-- vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-			-- vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+			vim.keymap.set({ "n" }, "<leader>gf", vim.lsp.buf.format, {})
+			-- vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+			-- vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
 		end,
 	},
 }
