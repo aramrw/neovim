@@ -95,7 +95,8 @@ return {
 	{
 		"rebelot/kanagawa.nvim",
 		name = "kanagawa",
-		priority = 1000,
+		lazy = false,
+		priority = 2000,
 		config = function()
 			require("kanagawa").setup({
 				undercurl = true,
@@ -112,8 +113,8 @@ return {
 					theme = {
 						all = {
 							ui = {
-								bg_gutter = "#151515",
-								dragonRed = "red"
+								bg_gutter = "#181515",
+								-- dragonRed = "red"
 							},
 							-- syn = {
 							-- 	operator = "#FF4B4B",
@@ -126,20 +127,20 @@ return {
 				},
 				overrides = function(colors)
 					local theme = colors.theme
-					local diagnostics = {
-						["Error"] = "#E05A5A",
-						["Warn"] = "#F8CD7D",
-						["Info"] = "#7DC1F8",
-						["Hint"] = "#8D99F6",
-					}
+					-- local diagnostics = {
+					-- 	["Error"] = "#E05A5A",
+					-- 	["Warn"] = "#F8CD7D",
+					-- 	["Info"] = "#7DC1F8",
+					-- 	["Hint"] = "#8D99F6",
+					-- }
 					return {
 						NormalFloat = { bg = "none" },
 						FloatBorder = { bg = "none" },
 						FloatTitle = { bg = "none" },
 						WinSeparator = { fg = "#333333", bg = "#121212" },
-						DiagnosticError = { fg = diagnostics.Error },
-						DiagnosticFloatingError = { fg = diagnostics.Error },
-						DiagnosticSignError = { fg = diagnostics.Error },
+						-- DiagnosticError = { fg = diagnostics.Error },
+						-- DiagnosticFloatingError = { fg = diagnostics.Error },
+						-- DiagnosticSignError = { fg = diagnostics.Error },
 
 						NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
 					}
