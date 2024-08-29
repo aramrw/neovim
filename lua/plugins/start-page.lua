@@ -15,7 +15,7 @@ return {
 						icon_hl = '@variable',
 						desc = 'Programming Files',
 						group = 'Label',
-						action = 'cd f:\\programming\\rust | Neotree toggle',
+						action = 'cd f:\\programming | Neotree toggle',
 						key = 'A',
 					},
 					{
