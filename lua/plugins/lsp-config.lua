@@ -32,10 +32,10 @@ return {
 			local lspconfig = require("lspconfig")
 			-- sometimes looks for the lsp in the wrong directory.
 			-- solved by adding an absolute path to the language servers that fail regularly.
-			local bin_path = "C:/Users/arami/AppData/Local/nvim-data/mason/bin/"
+			-- local bin_path = "C:/Users/arami/AppData/Local/nvim-data/mason/bin/"
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
-				cmd = { bin_path .. "lua-language-server.cmd" },
+				-- cmd = { bin_path .. "lua-language-server.cmd" },
 				on_init = function(client)
 					local path = client.workspace_folders[1].name
 					if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
@@ -59,8 +59,8 @@ return {
 			})
 			lspconfig.rust_analyzer.setup({
 				capabilities = capabilities,
-				-- cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
-				cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
+				-- -- cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
+				-- -- cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
 				settings = {
 					["rust-analyzer"] = {
 						check = {
@@ -88,39 +88,39 @@ return {
 			})
 			lspconfig.clangd.setup({
 				capabilities = capabilities,
-				cmd = {
-					"clangd",
-					"--background-index",
-					"--clang-tidy",
-					"--header-insertion=iwyu",
-					"--completion-style=detailed",
-					"--function-arg-placeholders",
-					"--fallback-style=llvm",
-					"--offset-encoding=utf-16",
-				},
+				-- cmd = {
+				-- 	"clangd",
+				-- 	"--background-index",
+				-- 	"--clang-tidy",
+				-- 	"--header-insertion=iwyu",
+				-- 	"--completion-style=detailed",
+				-- 	"--function-arg-placeholders",
+				-- 	"--fallback-style=llvm",
+				-- 	"--offset-encoding=utf-16",
+				-- },
 			})
 			lspconfig.tailwindcss.setup({
 				capabilities = capabilities,
 			})
 			lspconfig.emmet_language_server.setup({
 				capabilities = capabilities,
-				cmd = { bin_path .. 'emmet-language-server', '--stdio' },
+				-- cmd = { bin_path .. 'emmet-language-server', '--stdio' },
 			})
 			lspconfig.jsonls.setup({
 				capabilities = capabilities,
-				cmd = { bin_path .. 'vscode-json-language-server', '--stdio' },
+				-- cmd = { bin_path .. 'vscode-json-language-server', '--stdio' },
 			})
 			lspconfig.html.setup({
 				capabilities = capabilities,
-				cmd = { bin_path .. 'vscode-html-language-server', '--stdio' },
+				-- cmd = { bin_path .. 'vscode-html-language-server', '--stdio' },
 			})
 			lspconfig.svelte.setup({
 				capabilities = capabilities,
-				cmd = { bin_path .. 'svelteserver', '--stdio' },
+				-- cmd = { bin_path .. 'svelteserver', '--stdio' },
 			})
 			lspconfig.taplo.setup({
 				capabilities = capabilities,
-				cmd = { bin_path .. 'taplo', 'lsp', 'stdio' },
+				-- cmd = { bin_path .. 'taplo', 'lsp', 'stdio' },
 			})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
