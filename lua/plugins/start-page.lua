@@ -15,7 +15,7 @@ return {
 						icon_hl = '@variable',
 						desc = 'Programming Files',
 						group = 'Label',
-						action = 'cd f:\\programming | Neotree toggle',
+						action = 'cd ~/../../Volumes/SSD/SSD Programming | Neotree toggle',
 						key = 'A',
 					},
 					{
@@ -23,7 +23,7 @@ return {
 						icon_hl = '@variable',
 						desc = 'Lua Files',
 						group = 'Label',
-						action = 'cd c:\\users\\arami\\appdata\\local\\nvim | Neotree toggle',
+						action = 'cd ~/.config/nvim/lua | Neotree toggle',
 						key = 'B',
 					},
 					-- {
