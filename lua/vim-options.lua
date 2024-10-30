@@ -6,6 +6,8 @@ vim.cmd("set shiftwidth=2")
 vim.cmd("set number")
 -- set smart case search
 vim.cmd("set ignorecase")
+-- allow clipboard through wezterm on macOS
+vim.cmd("set clipboard=")
 
 -- dont automatically switch to the dir when a file gets opened
 --vim.opt.autochdir = false
@@ -32,6 +34,7 @@ vim.cmd("tnoremap <leader>bd <C-\\><C-n>:bd!<cr>")
 -- relative line numbers
 vim.wo.relativenumber = true
 
+-- Switch between buffers 
 vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
 vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
 
@@ -85,12 +88,16 @@ augroup END
 
 vim.cmd([[
   " Remap <C-Insert> to copy to system clipboard
-  nnoremap <C-Insert> "+y
-  vnoremap <C-Insert> "+y
+  nnoremap <C-c> "+y
+  vnoremap <C-c> "+y
   " Remap <S-Insert> to paste from system clipboard
-  nnoremap <S-Insert> "+p
-  inoremap <S-Insert> <C-R>+
+  nnoremap <C-S-v> "+p
+  inoremap <C-S-v> <C-R>+
 ]])
+
+  vim.keymap.set('n', '<Char-0xAA>', '<cmd>write<cr>', {
+    desc = 'N: Save current file by <command-s>',
+  })
 
 -- vim.cmd([[
 --   augroup remember_folds
