@@ -14,13 +14,10 @@ return {
 				ensure_installed = {
 					"lua_ls",
 					"tailwindcss",
-					"clangd",
 					"emmet_language_server",
 					"jsonls",
 					"taplo",
-					"html",
-					"pyright",
-					"pylsp"
+					"rust_analyzer"
 				},
 			})
 		end,

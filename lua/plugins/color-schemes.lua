@@ -6,7 +6,7 @@ local colorschemes = {
 		config = function()
 			local lualine = require('lualine')
 			-- Now don't forget to initialize lualine
-			lualine.setup(config)
+			lualine.setup({})
 		end
 	},
 	{
