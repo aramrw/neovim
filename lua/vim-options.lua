@@ -36,43 +36,43 @@ vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
 vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
 
 local function open_diagnostics_if_exist()
-	-- Get diagnostics for the current buffer
-	local diagnostics = vim.diagnostic.get()
+    -- Get diagnostics for the current buffer
+    local diagnostics = vim.diagnostic.get()
 
-	-- Return early if there are no diagnostics
-	if #diagnostics == 0 then
-		return
-	end
+    -- Return early if there are no diagnostics
+    if #diagnostics == 0 then
+        return
+    end
 
-	-- Open a floating diagnostic window if there are diagnostics
-	vim.diagnostic.open_float(nil, {
-		scope = "line",
-		border = "rounded",
-		relative = "editor",
-		format = function(diagnostic)
-			if diagnostic.source == 'rustc'
-					and diagnostic.user_data.lsp.data ~= nil
-			then
-				return diagnostic.user_data.lsp.data.rendered
-			else
-				return diagnostic.message
-			end
-		end,
-	})
+    -- Open a floating diagnostic window if there are diagnostics
+    vim.diagnostic.open_float(nil, {
+        scope = "line",
+        border = "rounded",
+        relative = "editor",
+        format = function(diagnostic)
+            if diagnostic.source == 'rustc'
+                and diagnostic.user_data.lsp.data ~= nil
+            then
+                return diagnostic.user_data.lsp.data.rendered
+            else
+                return diagnostic.message
+            end
+        end,
+    })
 end
 
 -- Map a key to the diagnostics
 vim.keymap.set('n', '<Enter>', open_diagnostics_if_exist, { noremap = true, silent = true })
 
 local options = {
-  smartindent = true,
-  splitbelow = true,
-  splitright = true,
-  signcolumn = "yes",
+    smartindent = true,
+    splitbelow = true,
+    splitright = true,
+    signcolumn = "yes",
 }
 
 for k, v in pairs(options) do
-  vim.opt[k] = v
+    vim.opt[k] = v
 end
 
 -- hightlight yank
@@ -99,3 +99,13 @@ vim.cmd([[
 --     au BufWinEnter ?* silent! loadview 1
 --   augroup END
 -- ]])
+
+for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
+    local default_diagnostic_handler = vim.lsp.handlers[method]
+    vim.lsp.handlers[method] = function(err, result, context, config)
+        if err ~= nil and err.code == -32802 then
+            return
+        end
+        return default_diagnostic_handler(err, result, context, config)
+    end
+end

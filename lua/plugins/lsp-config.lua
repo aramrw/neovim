@@ -1,3 +1,28 @@
+-- 1. find venv folder in current dir or 1 level deeper (venv/ or proj/venv)
+local function find_venv(start_path) -- Finds the venv folder required for LSP
+	-- Check current directory (if venv folder is at root)
+	local venv_path = start_path .. "/venv"
+	if vim.fn.isdirectory(venv_path) == 1 then
+		return venv_path
+	end
+	-- Check one level deeper (e.g if venv is in proj/venv)
+	local handle = vim.loop.fs_scandir(start_path)
+	if handle then
+		while true do
+			local name, type = vim.loop.fs_scandir_next(handle)
+			if not name then break end
+			if type == "directory" then
+				venv_path = start_path .. "/" .. name .. "/venv"
+				if vim.fn.isdirectory(venv_path) == 1 then
+					return venv_path
+				end
+			end
+		end
+	end
+
+	return nil
+end
+
 return {
 	{
 		"williamboman/mason.nvim",
@@ -19,13 +44,15 @@ return {
 					"jsonls",
 					"taplo",
 					"html",
-					"svelte"
+					"pyright",
+					"pylsp"
 				},
 			})
 		end,
 	},
 	{
 		"neovim/nvim-lspconfig",
+		dependencies = { 'saghen/blink.cmp' },
 		lazy = false,
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -35,7 +62,7 @@ return {
 			local bin_path = "C:/Users/arami/AppData/Local/nvim-data/mason/bin/"
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
-				cmd = { bin_path .. "lua-language-server.cmd" },
+				cmd = { bin_path .. "lua-language-server" },
 				on_init = function(client)
 					local path = client.workspace_folders[1].name
 					if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
@@ -59,8 +86,8 @@ return {
 			})
 			lspconfig.rust_analyzer.setup({
 				capabilities = capabilities,
-				-- cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
-				cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
+				--cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
+				--cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
 				settings = {
 					["rust-analyzer"] = {
 						check = {
@@ -79,9 +106,9 @@ return {
 							enable = true,
 						},
 						diagnostics = {
-							useRustcErrorCode = { enable = true },
+							-- useRustcErrorCode = { enable = true },
 							styleLints = { enable = true },
-							experimental = { enable = true },
+							-- experimental = { enable = true },
 						}
 					},
 				},
@@ -114,19 +141,54 @@ return {
 				capabilities = capabilities,
 				cmd = { bin_path .. 'vscode-html-language-server', '--stdio' },
 			})
-			lspconfig.svelte.setup({
-				capabilities = capabilities,
-				cmd = { bin_path .. 'svelteserver', '--stdio' },
-			})
 			lspconfig.taplo.setup({
 				capabilities = capabilities,
 				cmd = { bin_path .. 'taplo', 'lsp', 'stdio' },
 			})
+			-- lspconfig.pyright.setup({
+			-- 	capabilities = capabilities,
+			-- 	cmd = { bin_path .. 'pyright-langserver', '--stdio' },
+			-- })
+			lspconfig.pylsp.setup({
+				capabilities = capabilities,
+				-- on_attach = custom_attach,
+				cmd = {
+					bin_path ..
+					'pylsp',
+					-- '--stdio'
+				},
+				settings = {
+					pylsp = {
+						plugins = {
+							-- formatter options
+							black = { enabled = true },
+							autopep8 = { enabled = false },
+							yapf = { enabled = false },
+							-- linter options
+							pylint = { enabled = true, executable = "pylint" },
+							pyflakes = { enabled = false },
+							pycodestyle = { enabled = false },
+							-- type checker
+							pylsp_mypy = { enabled = true },
+							-- auto-completion options
+							jedi_completion = { fuzzy = true },
+							-- import sorting
+							pyls_isort = { enabled = true },
+						},
+					},
+				},
+				flags = {
+					debounce_text_changes = 200,
+				},
+			})
+			-- ### Keybinds
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
 			vim.keymap.set({ "n" }, "<leader>gf", vim.lsp.buf.format, {})
-			-- vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			-- vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
+			vim.keymap.set("n", "<leader>gr", function()
+				-- vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+				require('telescope.builtin').lsp_references()
+			end, {})
 		end,
 	},
 }

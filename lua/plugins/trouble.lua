@@ -53,11 +53,11 @@ return {
 			"<cmd>Trouble diagnostic_float toggle<cr>",
 			"Diagnostics",
 		},
-		{
-			"<leader>gr",
-			"<cmd>Trouble references_float toggle<cr>",
-			"References",
-		}
+		-- {
+		-- 	"<leader>gr",
+		-- 	"<cmd>Trouble references_float toggle<cr>",
+		-- 	"References",
+		-- }
 	},
 
 }

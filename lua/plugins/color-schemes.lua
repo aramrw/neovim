@@ -1,100 +1,16 @@
 local colorscheme_file = vim.fn.stdpath('data') .. '/colorscheme'
-
--- Define the available color schemes
+-- plugin setup
 local colorschemes = {
-	"kanagawa",
-	"miasma",
-	"gruvbox-material",
-	"rose-pine",
-	"lackluster",
-}
-
--- Lua Line themes to map to editor themes how I want
-local lualine_themes = {
-	["kanagawa"] = "gruvbox",
-	["miasma"] = "auto",
-	["gruvbox-material"] = "auto",
-	["rose-pine"] = "auto",
-	["lackluster"] = "auto",
-}
-
--- Function to read the last selected color scheme from the file
-local function read_colorscheme()
-	local f = io.open(colorscheme_file, "r")
-	if f then
-		local colorscheme = f:read("*l")
-		f:close()
-		return colorscheme
-	end
-	return nil
-end
-
--- Function to write the selected color scheme to the file
-local function write_colorscheme(colorscheme)
-	local f = io.open(colorscheme_file, "w")
-	if f then
-		f:write(colorscheme)
-		f:close()
-	end
-end
-
--- Function to switch to the selected color scheme and set the corresponding lualine theme
-local function select_colorscheme()
-	vim.ui.select(colorschemes, {
-		prompt = 'Select colorscheme:',
-		format_item = function(item)
-			return 'Colorscheme: ' .. item
-		end,
-	}, function(choice)
-		if choice then
-			vim.cmd.colorscheme(choice)
-			write_colorscheme(choice)
-			local lualine_theme = lualine_themes[choice]
-			require('lualine').setup({
-				options = {
-					theme = lualine_theme
-				}
-			})
-		end
-	end)
-end
-
--- Read and set the last selected color scheme on startup
-local function persist_colorscheme()
-	local last_colorscheme = read_colorscheme()
-	if last_colorscheme then
-		vim.cmd.colorscheme(last_colorscheme)
-		local lualine_theme = lualine_themes[last_colorscheme]
-		require('lualine').setup({
-			options = {
-				theme = lualine_theme
-			}
-		})
-	end
-end
-
-vim.schedule(persist_colorscheme)
-
--- Keybind to select and switch color schemes
-vim.keymap.set('n', '<leader>cs', select_colorscheme, { noremap = true, silent = true })
-
--- Plugin setup
-return {
-	-- setup lua line
 	{
 		'nvim-lualine/lualine.nvim',
 		config = function()
-			require('lualine').setup({
-				-- options = {
-				-- 	theme = 'auto'
-				-- }
-			})
+			local lualine = require('lualine')
+			-- Now don't forget to initialize lualine
+			lualine.setup(config)
 		end
 	},
-	-- setup colorschemes
 	{
 		"rebelot/kanagawa.nvim",
-		name = "kanagawa",
 		lazy = false,
 		priority = 2000,
 		config = function()
@@ -114,47 +30,22 @@ return {
 						all = {
 							ui = {
 								bg_gutter = "#181515",
-								-- dragonRed = "red"
 							},
-							-- syn = {
-							-- 	operator = "#FF4B4B",
-							-- 	preproc  = "#FF4B4B",
-							-- 	special2 = "#FF4B4B",
-							-- 	special3 = "#FF4B4B",
-							-- }
 						}
 					}
 				},
 				overrides = function(colors)
 					local theme = colors.theme
-					-- local diagnostics = {
-					-- 	["Error"] = "#E05A5A",
-					-- 	["Warn"] = "#F8CD7D",
-					-- 	["Info"] = "#7DC1F8",
-					-- 	["Hint"] = "#8D99F6",
-					-- }
 					return {
 						NormalFloat = { bg = "none" },
 						FloatBorder = { bg = "none" },
 						FloatTitle = { bg = "none" },
 						WinSeparator = { fg = "#333333", bg = "#121212" },
-						-- DiagnosticError = { fg = diagnostics.Error },
-						-- DiagnosticFloatingError = { fg = diagnostics.Error },
-						-- DiagnosticSignError = { fg = diagnostics.Error },
-
 						NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
 					}
 				end
 			})
 		end
-	},
-	{
-		"xero/miasma.nvim",
-		lazy = false,
-		priority = 1000,
-		config = function()
-			vim.cmd("colorscheme miasma")
-		end,
 	},
 	{
 		'sainnhe/gruvbox-material',
@@ -163,33 +54,180 @@ return {
 		config = function()
 			vim.g.gruvbox_material_background = 'hard'
 			vim.g.gruvbox_material_enable_italic = true
-			-- vim.g.gruvbox_material_transparent_background = true
 			vim.g.gruvbox_material_float_style = "dim"
-		end,
-	},
-	{
-		"rose-pine/neovim",
-		name = "rose-pine",
-		config = function()
-			require("rose-pine").setup({
-				dark_variant = "main", -- main, moon, or dawn
-				dim_inactive_windows = false,
-				extend_background_behind_borders = true,
-				enable = {
-					terminal = true,
-					legacy_highlights = false, -- Improve compatibility for previous versions of Neovim
-					migrations = true,
-				},
-			})
 		end,
 	},
 	{
 		"slugbyte/lackluster.nvim",
 		lazy = false,
 		priority = 1000,
+	},
+	{
+		"Mofiqul/vscode.nvim",
 		config = function()
-			-- lackluster-hack, lackluster-mint, lackluster
-			-- local lackluster = require("lackluster")
+			require("vscode").setup({
+				transparent = true,
+			})
+		end
+	},
+	{
+		"vague2k/vague.nvim",
+		lazy = false,
+		config = function()
+			require("vague").setup({
+				colors = {
+					comment = "#242424"
+				}
+			})
+		end
+	},
+	{
+		"zenbones-theme/zenbones.nvim",
+		-- Optionally install Lush. Allows for more configuration or extending the colorscheme
+		-- If you don't want to install lush, make sure to set g:zenbones_compat = 1
+		-- In Vim, compat mode is turned on as Lush only works in Neovim.
+		dependencies = "rktjmp/lush.nvim",
+		lazy = false,
+		priority = 1000,
+		-- config = function()
+		--     vim.g.zenbones_darken_comments = 45
+		-- end
+	},
+	{
+		"ramojus/mellifluous.nvim",
+		config = function()
+			require("mellifluous").setup({
+				-- invert bg shades for all colorsets
+				color_overrides = {
+					dark = {
+						bg = function(bg)
+							return bg:darkened(5)
+						end,
+					}
+				},
+			})
+		end
+	},
+	{
+		"ilof2/posterpole.nvim",
+		config = function()
+			require("posterpole").setup({
+				transparent = true,
+				colorless_bg = false,       -- grayscale or not
+				dim_inactive = false,       -- highlight inactive splits
+				brightness = 0,             -- negative numbers - darker, positive - lighter
+				selected_tab_highlight = false, --highlight current selected tab
+				fg_saturation = 0,          -- font saturation, gray colors become more brighter
+				bg_saturation = 30,         -- background saturation
+				colors = {
+					posterpole = {},          -- { mainRed = "#550000" }
+					posterpole_term = {},     -- { mainRed = 95 }
+				},
+			})
+		end
+	},
+	{
+		'bettervim/yugen.nvim',
+		config = function()
+			vim.cmd.colorscheme('yugen')
 		end,
 	}
 }
+
+local function extract_title(url)
+	if (url) then
+		for v in url:gmatch(".*/(.-)%.nvim$") do
+			if (v) then
+				return v;
+			end
+		end
+	end
+end
+
+-- lualine themes map to editor themes.
+local lualine_themes = {}
+for i, scheme in ipairs(colorschemes) do
+	-- dont add 'lualine' as a colorscheme
+	if i ~= 1 then
+		local name = extract_title(scheme[1])
+		if name and name ~= "lualine" then
+			lualine_themes[name] = "auto"
+		end
+	end
+end
+
+-- overwrite lualine_themes
+-- lualine_themes["kanagawa"] = "gruvbox"
+lualine_themes["kanagawa"] = "lackluster"
+
+-- write the selected color scheme to file
+local function write_colorscheme(colorscheme)
+	local f = io.open(colorscheme_file, "w")
+	if f then
+		f:write(colorscheme)
+		f:close()
+	end
+end
+
+-- read the last selected color scheme from file
+local function read_colorscheme()
+	local f = io.open(colorscheme_file, "r")
+	if f then
+		local colorscheme = f:read("*l")
+		f:close()
+		return colorscheme
+	end
+end
+
+-- apply selected color scheme &
+-- set corresponding lualine theme
+local function apply_colorscheme(choice)
+	vim.cmd.colorscheme(choice)
+	write_colorscheme(choice)
+	local lualine = require('lualine')
+	if lualine then
+		pcall(lualine.setup, {
+			options = {
+				theme = lualine_themes[choice]
+			}
+		})
+	end
+end
+
+-- switch to the selected color scheme
+local function select_colorscheme()
+	local scheme_names = {}
+	for i, scheme in ipairs(colorschemes) do
+		-- dont add 'lualine' as a colorscheme
+		if i ~= 1 then
+			local name = extract_title(scheme[1])
+			if name then
+				table.insert(scheme_names, name)
+			end
+		end
+	end
+	vim.ui.select(scheme_names, {
+		prompt = 'Select colorscheme:',
+		format_item = function(item)
+			return 'Colorscheme: ' .. item
+		end,
+	}, function(choice)
+		if choice then
+			apply_colorscheme(choice)
+		end
+	end)
+end
+
+-- read and set last selected color scheme on startup
+local function persist_colorscheme()
+	local last_colorscheme = read_colorscheme()
+	if last_colorscheme then
+		apply_colorscheme(last_colorscheme)
+	end
+end
+
+vim.schedule(persist_colorscheme)
+-- select and switch color schemes
+vim.keymap.set('n', '<leader>cs', select_colorscheme, { noremap = true, silent = true })
+
+return colorschemes

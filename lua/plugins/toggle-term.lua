@@ -15,7 +15,7 @@ return {
 		for option, value in pairs(powershell_options) do
 			vim.opt[option] = value
 		end
-		config = require("toggleterm").setup({
+		require("toggleterm").setup({
 			open_mapping = [[<C-l>]],
 			autochdir = true,
 			auto_scroll = false,
