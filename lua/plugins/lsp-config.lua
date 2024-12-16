@@ -1,28 +1,3 @@
--- 1. find venv folder in current dir or 1 level deeper (venv/ or proj/venv)
-local function find_venv(start_path) -- Finds the venv folder required for LSP
-	-- Check current directory (if venv folder is at root)
-	local venv_path = start_path .. "/venv"
-	if vim.fn.isdirectory(venv_path) == 1 then
-		return venv_path
-	end
-	-- Check one level deeper (e.g if venv is in proj/venv)
-	local handle = vim.loop.fs_scandir(start_path)
-	if handle then
-		while true do
-			local name, type = vim.loop.fs_scandir_next(handle)
-			if not name then break end
-			if type == "directory" then
-				venv_path = start_path .. "/" .. name .. "/venv"
-				if vim.fn.isdirectory(venv_path) == 1 then
-					return venv_path
-				end
-			end
-		end
-	end
-
-	return nil
-end
-
 return {
 	{
 		"williamboman/mason.nvim",
@@ -52,14 +27,15 @@ return {
 	},
 	{
 		"neovim/nvim-lspconfig",
-		dependencies = { 'saghen/blink.cmp' },
 		lazy = false,
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local os_info = vim.loop.os_uname()
 			local lspconfig = require("lspconfig")
-			-- sometimes looks for the lsp in the wrong directory.
+			-- For Windows 11: sometimes looks for the lsp in the wrong directory.
 			-- solved by adding an absolute path to the language servers that fail regularly.
-			local bin_path = "C:/Users/arami/AppData/Local/nvim-data/mason/bin/"
+			local bin_path = "c:/users/arami/appData/local/nvim-data/mason/bin/"
+
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
 				cmd = { bin_path .. "lua-language-server" },
@@ -86,8 +62,6 @@ return {
 			})
 			lspconfig.rust_analyzer.setup({
 				capabilities = capabilities,
-				--cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
-				--cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
 				settings = {
 					["rust-analyzer"] = {
 						check = {
