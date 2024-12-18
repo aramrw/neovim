@@ -2,6 +2,7 @@ return {
 	'nvimdev/dashboard-nvim',
 	event = 'VimEnter',
 	config = function()
+		local unix_config_action = 'cd | cd .config/nvim | Neotree toggle'	
 		require('dashboard').setup {
 			theme = 'hyper',
 			config = {
