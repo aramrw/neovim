@@ -28,36 +28,46 @@ return {
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local os_info = vim.loop.os_uname()
 			local lspconfig = require("lspconfig")
-			-- For Windows 11: sometimes looks for the lsp in the wrong directory.
-			-- solved by adding an absolute path to the language servers that fail regularly.
-			local bin_path = "c:/users/arami/appData/local/nvim-data/mason/bin/"
 
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities
-				--				cmd = { bin_path .. "lua-language-server" },
-				-- on_init = function(client)
-				-- 	local path = client.workspace_folders[1].name
-				-- 	if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-				-- 		return
-				-- 	end
-				--
-				-- 	client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-				-- 		runtime = {
-				-- 			version = 'LuaJIT'
-				-- 		},
-				-- 		-- Make the server aware of Neovim runtime files
-				-- 		workspace = {
-				-- 			checkThirdParty = true,
-				-- 			library = vim.api.nvim_get_runtime_file("", true)
-				-- 		}
-				-- 	})
-				-- end,
-				-- settings = {
-				-- 	Lua = {}
-				-- }
-			})
-			lspconfig.rust_analyzer.setup({
-				capabilities = capabilities,
+			-- Function to get command configuration based on OS
+			local function get_cmd_config(server_name)
+				local is_windows = os_info.sysname:lower():find("windows") ~= nil
+				local base_commands = {
+					lua_ls = "lua-language-server",
+					emmet_language_server = "emmet-language-server --stdio",
+					jsonls = "vscode-json-language-server --stdio",
+					html = "vscode-html-language-server --stdio",
+					taplo = "taplo lsp stdio",
+					-- pyright = "pyright-langserver --stdio",
+					-- pylsp = "pylsp",
+				}
+
+				if not is_windows or not base_commands[server_name] then
+					return nil
+				end
+
+				local bin_path = "c:/users/arami/appData/local/nvim-data/mason/bin/"
+				return { bin_path .. base_commands[server_name] }
+			end
+
+			-- Helper function to setup LSP with conditional cmd
+			local function setup_lsp(server_name, extra_config)
+				local config = vim.tbl_deep_extend("force",
+					{ capabilities = capabilities },
+					extra_config or {}
+				)
+
+				local cmd_config = get_cmd_config(server_name)
+				if cmd_config then
+					config.cmd = cmd_config
+				end
+
+				lspconfig[server_name].setup(config)
+			end
+
+			-- Setup each LSP with the helper function
+			setup_lsp("lua_ls")
+			setup_lsp("rust_analyzer", {
 				settings = {
 					["rust-analyzer"] = {
 						check = {
@@ -76,87 +86,24 @@ return {
 							enable = true,
 						},
 						diagnostics = {
-							-- useRustcErrorCode = { enable = true },
 							styleLints = { enable = true },
-							-- experimental = { enable = true },
 						}
 					},
 				},
 			})
-			lspconfig.clangd.setup({
-				capabilities = capabilities,
-				--				cmd = {
-				-- 					"clangd",
-				-- 					"--background-index",
-				-- 					"--clang-tidy",
-				-- 					"--header-insertion=iwyu",
-				-- 					"--completion-style=detailed",
-				-- 					"--function-arg-placeholders",
-				-- 					"--fallback-style=llvm",
-				-- 					"--offset-encoding=utf-16",
-				-- 				},
-			})
-			lspconfig.tailwindcss.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.emmet_language_server.setup({
-				capabilities = capabilities,
-				--				cmd = { bin_path .. 'emmet-language-server', '--stdio' },
-			})
-			lspconfig.jsonls.setup({
-				capabilities = capabilities,
-				--				cmd = { bin_path .. 'vscode-json-language-server', '--stdio' },
-			})
-			lspconfig.html.setup({
-				capabilities = capabilities,
-				--				cmd = { bin_path .. 'vscode-html-language-server', '--stdio' },
-			})
-			lspconfig.taplo.setup({
-				capabilities = capabilities,
-				--				cmd = { bin_path .. 'taplo', 'lsp', 'stdio' },
-			})
-			-- lspconfig.pyright.setup({
-			-- 	capabilities = capabilities,
-			--			-- 	cmd = { bin_path .. 'pyright-langserver', '--stdio' },
-			-- })
-			-- 			lspconfig.pylsp.setup({
-			-- 				capabilities = capabilities,
-			-- 				-- on_attach = custom_attach,
-			-- --				cmd = {
-			-- 					bin_path ..
-			-- 					'pylsp',
-			-- 					-- '--stdio'
-			-- 				},
-			-- 				settings = {
-			-- 					pylsp = {
-			-- 						plugins = {
-			-- 							-- formatter options
-			-- 							black = { enabled = true },
-			-- 							autopep8 = { enabled = false },
-			-- 							yapf = { enabled = false },
-			-- 							-- linter options
-			-- 							pylint = { enabled = true, executable = "pylint" },
-			-- 							pyflakes = { enabled = false },
-			-- 							pycodestyle = { enabled = false },
-			-- 							-- type checker
-			-- 							pylsp_mypy = { enabled = true },
-			-- 							-- auto-completion options
-			-- 							jedi_completion = { fuzzy = true },
-			-- 							-- import sorting
-			-- 							pyls_isort = { enabled = true },
-			-- 						},
-			-- 					},
-			-- 				},
-			-- 				flags = {
-			-- 					debounce_text_changes = 200,
-			-- 				},
-			-- 			})
-			-- ### Keybinds
+
+			setup_lsp("clangd")
+			setup_lsp("tailwindcss")
+			setup_lsp("emmet_language_server")
+			setup_lsp("jsonls")
+			setup_lsp("html")
+			setup_lsp("taplo")
+
+			-- Keybinds
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
 			vim.keymap.set({ "n" }, "<leader>gf", vim.lsp.buf.format, {})
 			vim.keymap.set("n", "<leader>gr", function()
-				-- vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 				require('telescope.builtin').lsp_references()
 			end, {})
 		end,
