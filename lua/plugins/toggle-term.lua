@@ -20,6 +20,7 @@ return {
 				vim.opt[option] = value
 			end
 		end
+
 		require("toggleterm").setup({
 			open_mapping = [[<C-l>]],
 			autochdir = true,
@@ -30,7 +31,7 @@ return {
 			float_opts = {
 				border = "curved",
 				title_pos = "center",
-				width = 140,
+				width = 110,
 				height = 90,
 				zindex = 500,
 			}
