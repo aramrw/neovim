@@ -4,7 +4,7 @@ local os_config_action = function()
 	if current_platform == "Linux" then
 		return 'cd | cd .config/nvim | Neotree toggle'
 	else
-		if current_platform == "Windows" then
+		if current_platform == "Windows_NT" then
 			return 'cd c:\\users\\arami\\appdata\\local\\nvim | Neotree toggle'
 		end
 	end
@@ -14,7 +14,7 @@ local os_dev_folder_action = function()
 	if current_platform == "Linux" then
 		return 'cd | cd .home/dev | Neotree toggle'
 	else
-		if current_platform == "Windows" then
+		if current_platform == "Windows_NT" then
 			return 'cd f:\\programming | Neotree toggle'
 		end
 	end
