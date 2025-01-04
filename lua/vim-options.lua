@@ -36,43 +36,43 @@ vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
 vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
 
 local function open_diagnostics_if_exist()
-    -- Get diagnostics for the current buffer
-    local diagnostics = vim.diagnostic.get()
+	-- Get diagnostics for the current buffer
+	local diagnostics = vim.diagnostic.get()
 
-    -- Return early if there are no diagnostics
-    if #diagnostics == 0 then
-        return
-    end
+	-- Return early if there are no diagnostics
+	if #diagnostics == 0 then
+		return
+	end
 
-    -- Open a floating diagnostic window if there are diagnostics
-    vim.diagnostic.open_float(nil, {
-        scope = "line",
-        border = "rounded",
-        relative = "editor",
-        format = function(diagnostic)
-            if diagnostic.source == 'rustc'
-                and diagnostic.user_data.lsp.data ~= nil
-            then
-                return diagnostic.user_data.lsp.data.rendered
-            else
-                return diagnostic.message
-            end
-        end,
-    })
+	-- Open a floating diagnostic window if there are diagnostics
+	vim.diagnostic.open_float(nil, {
+		scope = "line",
+		border = "rounded",
+		relative = "editor",
+		format = function(diagnostic)
+			if diagnostic.source == 'rustc'
+					and diagnostic.user_data.lsp.data ~= nil
+			then
+				return diagnostic.user_data.lsp.data.rendered
+			else
+				return diagnostic.message
+			end
+		end,
+	})
 end
 
 -- Map a key to the diagnostics
 vim.keymap.set('n', '<Enter>', open_diagnostics_if_exist, { noremap = true, silent = true })
 
 local options = {
-    smartindent = true,
-    splitbelow = true,
-    splitright = true,
-    signcolumn = "yes",
+	smartindent = true,
+	splitbelow = true,
+	splitright = true,
+	signcolumn = "yes",
 }
 
 for k, v in pairs(options) do
-    vim.opt[k] = v
+	vim.opt[k] = v
 end
 
 -- hightlight yank
@@ -101,11 +101,43 @@ vim.cmd([[
 -- ]])
 
 for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
-    local default_diagnostic_handler = vim.lsp.handlers[method]
-    vim.lsp.handlers[method] = function(err, result, context, config)
-        if err.code == -32802 or err.code == -32603 and err ~= nil then
-            return
-        end
-        return default_diagnostic_handler(err, result, context, config)
-    end
+	local default_diagnostic_handler = vim.lsp.handlers[method]
+	vim.lsp.handlers[method] = function(err, result, context, config)
+		if err.code == -32802 or err.code == -32603 and err ~= nil then
+			return
+		end
+		return default_diagnostic_handler(err, result, context, config)
+	end
 end
+
+function delete_shada_folder()
+	local shada_path = vim.fn.stdpath('data') .. '/shada/'
+
+	-- Check if the folder exists
+	local stat = vim.loop.fs_stat(shada_path)
+
+	if stat and stat.type == 'directory' then
+		-- Cross-platform deletion handling
+		local cmd
+		if vim.fn.has('win32') == 1 then
+			-- For Windows (PowerShell command)
+			cmd = 'powershell -Command "Remove-Item -Recurse -Force \'' .. shada_path .. '\' "'
+		else
+			-- For Unix-like systems (Linux/macOS)
+			cmd = 'rm -rf "' .. shada_path .. '"'
+		end
+
+		-- Execute the command
+		local ok, err = os.execute(cmd)
+		if ok then
+			print('Shada folder deleted.')
+		else
+			print('Failed to delete shada folder: ' .. (err or 'unknown error'))
+		end
+	else
+		print('Shada folder not found.')
+	end
+end
+
+-- Create a user command to delete the shada folder
+vim.api.nvim_create_user_command('DeleteShada', delete_shada_folder, {})
