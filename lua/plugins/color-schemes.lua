@@ -48,6 +48,39 @@ local colorschemes = {
 		end
 	},
 	{
+		"ilof2/posterpole.nvim",
+		config = function()
+			require("posterpole").setup({
+				transparent = true,
+				colorless_bg = false,       -- grayscale or not
+				dim_inactive = false,       -- highlight inactive splits
+				brightness = 0,             -- negative numbers - darker, positive - lighter
+				selected_tab_highlight = false, --highlight current selected tab
+				fg_saturation = 0,          -- font saturation, gray colors become more brighter
+				bg_saturation = 30,         -- background saturation
+				colors = {
+					posterpole = {},          -- { mainRed = "#550000" }
+					posterpole_term = {},     -- { mainRed = 95 }
+				},
+			})
+		end
+	},
+	{
+		"ramojus/mellifluous.nvim",
+		config = function()
+			require("mellifluous").setup({
+				-- invert bg shades for all colorsets
+				color_overrides = {
+					dark = {
+						bg = function(bg)
+							return bg:darkened(5)
+						end,
+					}
+				},
+			})
+		end
+	},
+	{
 		'sainnhe/gruvbox-material',
 		lazy = false,
 		priority = 1000,
@@ -93,45 +126,6 @@ local colorschemes = {
 		--     vim.g.zenbones_darken_comments = 45
 		-- end
 	},
-	{
-		"ramojus/mellifluous.nvim",
-		config = function()
-			require("mellifluous").setup({
-				-- invert bg shades for all colorsets
-				color_overrides = {
-					dark = {
-						bg = function(bg)
-							return bg:darkened(5)
-						end,
-					}
-				},
-			})
-		end
-	},
-	{
-		"ilof2/posterpole.nvim",
-		config = function()
-			require("posterpole").setup({
-				transparent = true,
-				colorless_bg = false,       -- grayscale or not
-				dim_inactive = false,       -- highlight inactive splits
-				brightness = 0,             -- negative numbers - darker, positive - lighter
-				selected_tab_highlight = false, --highlight current selected tab
-				fg_saturation = 0,          -- font saturation, gray colors become more brighter
-				bg_saturation = 30,         -- background saturation
-				colors = {
-					posterpole = {},          -- { mainRed = "#550000" }
-					posterpole_term = {},     -- { mainRed = 95 }
-				},
-			})
-		end
-	},
-	{
-		'bettervim/yugen.nvim',
-		config = function()
-			vim.cmd.colorscheme('yugen')
-		end,
-	}
 }
 
 local function extract_title(url)
