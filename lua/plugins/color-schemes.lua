@@ -108,8 +108,13 @@ local colorschemes = {
 		lazy = false,
 		config = function()
 			require("vague").setup({
-				colors = {
-					comment = "#242424"
+				style = {
+					-- ... other opts
+					-- Override colors
+					colors = {
+						floatBorder = "#242424", -- <-- here
+						comment = "#646477", -- <-- and here
+					},
 				}
 			})
 		end
@@ -153,6 +158,7 @@ end
 -- overwrite lualine_themes
 -- lualine_themes["kanagawa"] = "gruvbox"
 lualine_themes["kanagawa"] = "lackluster"
+lualine_themes["vague"] = "lackluster"
 
 -- write the selected color scheme to file
 local function write_colorscheme(colorscheme)

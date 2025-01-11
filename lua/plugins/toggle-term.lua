@@ -4,7 +4,7 @@ return {
 	config = function()
 		local os_info = vim.loop.os_uname()
 
-		-- Check if the OS is Windows
+		-- is Windows && set pwsh as default terminal
 		if os_info.version:find("Windows") then
 			local powershell_options = {
 				shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell",
@@ -32,10 +32,11 @@ return {
 				border = "curved",
 				title_pos = "center",
 				width = 110,
-				height = 90,
+				height = 70,
 				zindex = 500,
 			}
 		})
+
 		vim.keymap.set("n", "<leader>tt", ":2ToggleTerm<CR>", {})
 	end,
 }
