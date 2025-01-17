@@ -34,9 +34,8 @@ vim.cmd("tnoremap <leader>bd <C-\\><C-n>:bd!<cr>")
 -- relative line numbers
 vim.wo.relativenumber = true
 
--- Switch between buffers 
-vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
-vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
+-- Switch to the next window with a single tap of <C-e>
+vim.api.nvim_set_keymap("n", "<C-w>", ":wincmd w<CR>", { noremap = true, silent = true })
 
 local function open_diagnostics_if_exist()
 	-- Get diagnostics for the current buffer
