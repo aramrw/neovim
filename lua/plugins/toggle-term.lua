@@ -2,10 +2,11 @@ return {
 	"akinsho/toggleterm.nvim",
 	version = "*",
 	config = function()
-		local os_info = vim.loop.os_uname()
+		local plat = vim.loop.os_uname().sysname;
 
 		local options = {
-			shell = "c:/users/arami/appdata/local/programs/nu/bin/nu.exe",
+			shell = plat == "Windows_NT" and "c:/users/arami/appdata/local/programs/nu/bin/nu.exe" or
+			"/opt/homebrew/bin/nu",
 			shellcmdflag = '--stdin --no-newline -c',
 			shellredir = "out+err> %s",
 			shellpipe = "| complete | update stderr { ansi strip } | tee { get stderr | save --force --raw %s } | into record",

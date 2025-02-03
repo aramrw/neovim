@@ -1,7 +1,7 @@
 local current_platform = vim.loop.os_uname().sysname;
 
 local os_config_action = function()
-	if current_platform == "Linux" then
+	if current_platform ~= "Windows_NT" then
 		return 'cd | cd .config/nvim | Neotree toggle'
 	else
 		if current_platform == "Windows_NT" then
@@ -11,7 +11,7 @@ local os_config_action = function()
 end
 
 local os_dev_folder_action = function()
-	if current_platform == "Linux" then
+	if current_platform ~= "Windows_NT" then
 		return 'cd | cd .home/dev | Neotree toggle'
 	else
 		if current_platform == "Windows_NT" then
