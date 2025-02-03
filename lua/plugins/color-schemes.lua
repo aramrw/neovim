@@ -131,14 +131,21 @@ local colorschemes = {
 		--     vim.g.zenbones_darken_comments = 45
 		-- end
 	},
+	{
+		"metalelf0/jellybeans-nvim",
+		dependencies = "rktjmp/lush.nvim",
+		lazy = false,
+	}
 }
 
 local function extract_title(url)
-	if (url) then
-		for v in url:gmatch(".*/(.-)%.nvim$") do
-			if (v) then
-				return v;
-			end
+	if url then
+		-- Match everything after the last '/'
+		local str = url:match(".*/(.-)$")
+		if str then
+			-- Extract everything up to the first '-' or '.'
+			str = str:match("^[^.]+")
+			return str
 		end
 	end
 end
