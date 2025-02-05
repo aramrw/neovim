@@ -144,3 +144,32 @@ vim.api.nvim_create_user_command('Aramrw', command_handler, {
 	complete = aramrw_completion,
 	desc = 'Execute Aramrw commands'
 })
+
+local function open_diagnostics_if_exist()
+	-- Get diagnostics for the current buffer
+	local diagnostics = vim.diagnostic.get()
+
+	-- Return early if there are no diagnostics
+	if #diagnostics == 0 then
+		return
+	end
+
+	-- Open a floating diagnostic window if there are diagnostics
+	vim.diagnostic.open_float(nil, {
+		scope = "line",
+		border = "rounded",
+		relative = "editor",
+		format = function(diagnostic)
+			if diagnostic.source == 'rustc'
+					and diagnostic.user_data.lsp.data ~= nil
+			then
+				return diagnostic.user_data.lsp.data.rendered
+			else
+				return diagnostic.message
+			end
+		end,
+	})
+end
+
+-- Map a key to the diagnostics
+vim.keymap.set('n', '<Enter>', open_diagnostics_if_exist, { noremap = true, silent = true })
