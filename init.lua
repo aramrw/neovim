@@ -6,7 +6,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
         "clone",
         "--filter=blob:none",
         "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
+        -- latest stable release
+        "--branch=stable",
         lazypath,
     })
 end
@@ -15,4 +16,5 @@ vim.opt.rtp:prepend(lazypath)
 -- local opts = {}
 
 require("vim-options")
+require("cmds")
 require("lazy").setup("plugins")
