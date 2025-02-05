@@ -34,7 +34,7 @@ local function nu_open_config()
 	if (os == 'Windows_NT') then
 		cmd = string.format('explorer "%s"', nu.default_config_dir:gsub('\\', '\\\\'))
 	elseif (os == 'Darwin') then
-		cmd = string.format('open "%s"', nu.default_config_dir)
+		cmd = string.format('^open "%s"', nu.default_config_dir)
 	elseif (os == 'Linux') then
 		cmd = string.format('xdg-open "%s"', nu.default_config_dir)
 	else
