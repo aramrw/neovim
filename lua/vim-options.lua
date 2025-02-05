@@ -33,7 +33,7 @@ vim.cmd("tnoremap <leader>bd <C-\\><C-n>:bd!<cr>")
 vim.wo.relativenumber = true
 
 vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
-vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
+vim.cmd("nnoremap <C-S-e> :wincmd W<CR>")
 
 local function open_diagnostics_if_exist()
 	-- Get diagnostics for the current buffer

@@ -1,6 +1,5 @@
 local os = vim.loop.os_uname().sysname
-local home = os.getenv("HOME") or os.getenv("USERPROFILE") -- For cross-platform home directory
-
+local home = vim.env.HOME or vim.env.USERPROFILE
 local nu = {
 	default_config_dir = (os == "Darwin" and home .. "~/Library/Application Support/nushell") or
 			(os == "Linux" and home .. "~/.config/nushell") or
@@ -31,7 +30,7 @@ local function delete_shada_folder()
 end
 
 local function write_config_nu()
-	local path = nu.default_config_dir();
+	local path = nu.default_config_dir;
 
 	local text = [[
 # from neovim 🚀
