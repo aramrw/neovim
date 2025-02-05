@@ -1,3 +1,5 @@
+local os = vim.loop.os_uname().sysname;
+
 -- set tab width to 2 instead of 4
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
@@ -32,8 +34,11 @@ vim.cmd("tnoremap <leader>bd <C-\\><C-n>:bd!<cr>")
 -- relative line numbers
 vim.wo.relativenumber = true
 
-vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
-vim.cmd("nnoremap <C-S-e> :wincmd W<CR>")
+if (os == "Windows_NT") then
+	vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
+	vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
+end
+
 
 local function open_diagnostics_if_exist()
 	-- Get diagnostics for the current buffer

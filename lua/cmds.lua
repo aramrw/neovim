@@ -1,10 +1,10 @@
 local os = vim.loop.os_uname().sysname
 local home = vim.env.HOME or vim.env.USERPROFILE
 local nu = {
-	default_config_dir = (os == "Darwin" and home .. "~/Library/Application Support/nushell") or
-			(os == "Linux" and home .. "~/.config/nushell") or
-			(os:match("Windows") and home .. "~/AppData/Roaming/nushell") or
-			"<unknown os>"                    -- Fallback if OS is unknown
+	default_config_dir = (os == "Darwin" and home .. "/Library/Application Support/nushell") or
+			(os == "Linux" and home .. "/.config/nushell") or
+			(os:match("Windows") and home .. "\\AppData\\Roaming\\nushell") or
+			"<unknown os>"
 }
 
 -- Define command functions first
@@ -29,7 +29,21 @@ local function delete_shada_folder()
 	end
 end
 
-local function write_config_nu()
+local function nu_open_config()
+	local cmd = ""
+	if (os == 'Windows_NT') then
+		cmd = string.format('explorer "%s"', nu.default_config_dir:gsub('\\', '\\\\'))
+	elseif (os == 'Darwin') then
+		cmd = string.format('open "%s"', nu.default_config_dir)
+	elseif (os == 'Linux') then
+		cmd = string.format('xdg-open "%s"', nu.default_config_dir)
+	else
+		print("unknown os: %s", os)
+	end
+	vim.cmd(string.format([[!%s]], cmd))
+end
+
+local function nu_write_config()
 	local path = nu.default_config_dir;
 
 	local text = [[
@@ -42,6 +56,7 @@ $env.config = {
 
 $env.Path = ($env.Path | split row ';') | flatten
 
+let os = sys host;
 if ($os.long_os_version | str starts-with "MacOS") {
     $env.path = ($env.path | prepend "/opt/homebrew")
 }
@@ -61,7 +76,8 @@ local aramrw_commands = {
 		DeleteShadaFolder = delete_shada_folder,
 	},
 	Nu = {
-		AppendDefaultConfig = write_config_nu,
+		AppendDefaultConfig = nu_write_config,
+		OpenConfig = nu_open_config,
 	},
 }
 
