@@ -110,35 +110,3 @@ for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) d
 		return default_diagnostic_handler(err, result, context, config)
 	end
 end
-
-function delete_shada_folder()
-	local shada_path = vim.fn.stdpath('data') .. '/shada/'
-
-	-- Check if the folder exists
-	local stat = vim.loop.fs_stat(shada_path)
-
-	if stat and stat.type == 'directory' then
-		-- Cross-platform deletion handling
-		local cmd
-		if vim.fn.has('win32') == 1 then
-			-- For Windows (PowerShell command)
-			cmd = 'powershell -Command "Remove-Item -Recurse -Force \'' .. shada_path .. '\' "'
-		else
-			-- For Unix-like systems (Linux/macOS)
-			cmd = 'rm -rf "' .. shada_path .. '"'
-		end
-
-		-- Execute the command
-		local ok, err = os.execute(cmd)
-		if ok then
-			print('Shada folder deleted.')
-		else
-			print('Failed to delete shada folder: ' .. (err or 'unknown error'))
-		end
-	else
-		print('Shada folder not found.')
-	end
-end
-
--- Create a user command to delete the shada folder
-vim.api.nvim_create_user_command('DeleteShada', delete_shada_folder, {})
