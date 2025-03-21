@@ -86,3 +86,31 @@ for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) d
 		return default_diagnostic_handler(err, result, context, config)
 	end
 end
+
+local function open_diagnostics_if_exist()
+	-- Get diagnostics for the current buffer
+	local diagnostics = vim.diagnostic.get()
+
+	-- Return early if there are no diagnostics
+	if #diagnostics == 0 then
+		return
+	end
+
+	-- Open a floating diagnostic window if there are diagnostics
+	vim.diagnostic.open_float(nil, {
+		scope = "line",
+		border = "rounded",
+		relative = "editor",
+		format = function(diagnostic)
+			if diagnostic.source == 'rustc'
+					and diagnostic.user_data.lsp.data ~= nil
+			then
+				return diagnostic.user_data.lsp.data.rendered
+			else
+				return diagnostic.message
+			end
+		end,
+	})
+end
+
+vim.keymap.set('n', '<CR>', open_diagnostics_if_exist, { noremap = true, silent = true, desc = "Show Diagnostics" })
