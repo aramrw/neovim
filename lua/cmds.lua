@@ -33,23 +33,24 @@ local function delete_shada_folder()
 		return false
 	end
 end
-local function nu_open_config()
+
+local function open_path(newpath)
 	local cmd = ""
 	if (os == 'Windows_NT') then
-		cmd = string.format('explorer "%s"', vim.fn.escape(nu.default_config_dir, '"'))
+		cmd = string.format('explorer "%s"', vim.fn.escape(newpath, '"'))
 	elseif (os == 'Darwin') then
-		cmd = string.format('open "%s"', vim.fn.escape(nu.default_config_dir, '"'))
+		cmd = string.format('open "%s"', vim.fn.escape(newpath, '"'))
 	elseif (os == 'Linux') then
-		cmd = string.format('xdg-open "%s"', vim.fn.escape(nu.default_config_dir, '"'))
+		cmd = string.format('xdg-open "%s"', vim.fn.escape(newpath, '"'))
 		-- Add fallbacks for Linux
 		local handle = io.popen('which gnome-open')
 		if handle and handle:read() ~= nil then
-			cmd = string.format('gnome-open "%s"', vim.fn.escape(nu.default_config_dir, '"'))
+			cmd = string.format('gnome-open "%s"', vim.fn.escape(newpath, '"'))
 			handle:close()
 		else
 			handle = io.popen('which kde-open5')
 			if handle and handle:read() ~= nil then
-				cmd = string.format('kde-open5 "%s"', vim.fn.escape(nu.default_config_dir, '"'))
+				cmd = string.format('kde-open5 "%s"', vim.fn.escape(newpath, '"'))
 				handle:close()
 			end
 		end
@@ -59,6 +60,18 @@ local function nu_open_config()
 	end
 	vim.cmd('!' .. cmd)
 	return true
+end
+
+local function nvim_open_config()
+	local cpath = "";
+	local windows = home .. "\\appdata\\local\\nvim";
+	local posix = home .. "/.config/nvim";
+	if (os == 'Windows_NT') then
+		cpath = windows;
+	else
+		cpath = posix;
+	end
+	open_path(cpath);
 end
 
 local function nu_write_config()
@@ -104,6 +117,11 @@ local aramrw_commands = {
 			desc = "Delete the shada folder",
 			params = {} -- No parameters needed
 		},
+		openconfig = {
+			func = nvim_open_config,
+			desc = "Open the Neovim Config Directory",
+			params = {}
+		}
 	},
 	nu = {
 		appendconfig = {
