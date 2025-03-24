@@ -14,8 +14,10 @@ return {
 			shellxquote = "",
 		}
 
-		for option, value in pairs(powershell_options) do
-			vim.opt[option] = value
+		if plat == "Windows_NT" then
+			for option, value in pairs(powershell_options) do
+				vim.opt[option] = value
+			end
 		end
 
 		require("toggleterm").setup({
