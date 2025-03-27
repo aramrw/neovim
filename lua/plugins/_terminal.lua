@@ -49,7 +49,7 @@ local toggle_terminal = function()
 		if vim.bo[state.floating.buf].buftype ~= "terminal" then
 			vim.cmd.terminal()
 		end
-		--vim.cmd.startinsert()  -- Enter terminal mode
+		vim.cmd.startinsert()  -- Enter terminal mode
 
 		vim.api.nvim_create_autocmd("BufWipeout", {
 			buffer = state.floating.buf,
