@@ -66,15 +66,16 @@ local toggle_terminal = function()
 	end
 end
 
+local nvimconfigpath = vim.fn.stdpath("config");
 if (os == "Windows_NT") then
-	local nvimconfigpath = vim.fn.stdpath("config");
 	vim.opt["shell"] = nvimconfigpath .. "\\bin\\shell\\shell-win.exe";
-	-- vim.opt["shell"] = "pwsh";
+elseif (os == "Linux") then
+	vim.opt["shell"] = nvimconfigpath .. "/bin/shell/shell-linux";
 end
 
 -- Example usage:
 -- Create a floating window with default dimensions
 vim.api.nvim_create_user_command("Floaterminal", toggle_terminal, {})
-vim.keymap.set("n", "<c-l>", toggle_terminal)
+vim.keymap.set({"n", "t"}, "<c-l>", toggle_terminal)
 
 return {}
