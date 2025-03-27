@@ -24,6 +24,7 @@ return {
 
 			-- Get installed LSPs via mason
 			local mason_bin_path = vim.fn.stdpath("data") .. "/mason/bin/"
+			print(mason_bin_path);
 
 			-- Diagnostics:
 			-- 1. Unused local `lsp_cmds`. [unused-local]
@@ -66,11 +67,11 @@ return {
 								check = {
 									command = "clippy",
 								},
-								cargo = {
-									extraEnv = {
-										RUSTUP_TOOLCHAIN = "nightly",
-									},
-								},
+								-- cargo = {
+								-- 	extraEnv = {
+								-- 		RUSTUP_TOOLCHAIN = "nightly",
+								-- 	},
+								-- },
 								extraArgs = {
 									"--",
 									"--no-deps",
