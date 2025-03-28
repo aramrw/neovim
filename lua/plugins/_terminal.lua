@@ -70,7 +70,7 @@ local nvimconfigpath = vim.fn.stdpath("config");
 if (os == "Windows_NT") then
 	vim.opt["shell"] = nvimconfigpath .. "\\bin\\shell\\shell-win.exe";
 elseif (os == "Linux") then
-	vim.opt["shell"] = nvimconfigpath .. "/bin/shell/shell-linux";
+	-- vim.opt["shell"] = nvimconfigpath .. "/bin/shell/shell-linux";
 end
 
 -- Example usage:
