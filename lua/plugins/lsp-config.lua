@@ -3,7 +3,8 @@ return {
 		"williamboman/mason.nvim",
 		config = function()
 			require("mason").setup({
-				PATH = "append",         -- Ensures Mason's bin directory is added to Neovim's PATH
+				-- Ensures Mason's bin directory is added to Neovim's PATH
+				PATH = "append",
 			})
 		end,
 	},
@@ -17,7 +18,8 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local capabilities = require("cmp_nvim_lsp")
+					.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 			local lspconfig = require("lspconfig")
 
 			-- Default LSP setup function
@@ -47,6 +49,7 @@ return {
 									extraEnv = {
 										RUSTUP_TOOLCHAIN = "nightly",
 									},
+									features = "all",
 								},
 								buildScripts = {
 									enable = true,
@@ -65,7 +68,7 @@ return {
 			})
 
 			-- Keybindings for LSP functionality
-			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+			-- vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
 			vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
 			vim.keymap.set("n", "<leader>gr", function()
