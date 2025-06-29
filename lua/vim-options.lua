@@ -148,3 +148,5 @@ vim.api.nvim_create_autocmd('BufRead', {
 		})
 	end,
 })
+
+vim.cmd([[autocmd FileType rust setlocal conceallevel=0]])
