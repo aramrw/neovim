@@ -96,62 +96,55 @@ local function open_diagnostics_if_exist()
 		return
 	end
 
-	-- Open a floating diagnostic window if there are diagnostics
+	-- Open a floating diagnostic window if there are diagnostics.
+	-- We have removed the custom `format` function.
 	vim.diagnostic.open_float(nil, {
 		scope = "line",
 		border = "rounded",
 		relative = "editor",
-		format = function(diagnostic)
-			if diagnostic.source == 'rustc'
-					and diagnostic.user_data.lsp.data ~= nil
-			then
-				return diagnostic.user_data.lsp.data.rendered
-			else
-				return diagnostic.message
-			end
-		end,
 	})
 end
 
+-- Your keymap remains the same
 vim.keymap.set('n', '<CR>', open_diagnostics_if_exist, { noremap = true, silent = true, desc = "Show Diagnostics" })
 
 -- remember last cursor position in files
 vim.api.nvim_create_autocmd('BufRead', {
-  callback = function(opts)
-    vim.api.nvim_create_autocmd('BufWinEnter', {
-      once = true,
-      buffer = opts.buf,
-      callback = function()
-        local ft = vim.bo[opts.buf].filetype
-        local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
-        if
-          not (ft:match('commit') and ft:match('rebase'))
-          and last_known_line > 1
-          and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
-        then
-          vim.api.nvim_feedkeys([[g`"]], 'nx', false)
-        end
-      end,
-    })
-  end,
+	callback = function(opts)
+		vim.api.nvim_create_autocmd('BufWinEnter', {
+			once = true,
+			buffer = opts.buf,
+			callback = function()
+				local ft = vim.bo[opts.buf].filetype
+				local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
+				if
+						not (ft:match('commit') and ft:match('rebase'))
+						and last_known_line > 1
+						and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+				then
+					vim.api.nvim_feedkeys([[g`"]], 'nx', false)
+				end
+			end,
+		})
+	end,
 })
 
 vim.api.nvim_create_autocmd('BufRead', {
-  callback = function(opts)
-    vim.api.nvim_create_autocmd('BufWinEnter', {
-      once = true,
-      buffer = opts.buf,
-      callback = function()
-        local ft = vim.bo[opts.buf].filetype
-        local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
-        if
-          not (ft:match('commit') and ft:match('rebase'))
-          and last_known_line > 1
-          and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
-        then
-          vim.api.nvim_feedkeys([[g`"]], 'nx', false)
-        end
-      end,
-    })
-  end,
+	callback = function(opts)
+		vim.api.nvim_create_autocmd('BufWinEnter', {
+			once = true,
+			buffer = opts.buf,
+			callback = function()
+				local ft = vim.bo[opts.buf].filetype
+				local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
+				if
+						not (ft:match('commit') and ft:match('rebase'))
+						and last_known_line > 1
+						and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+				then
+					vim.api.nvim_feedkeys([[g`"]], 'nx', false)
+				end
+			end,
+		})
+	end,
 })
