@@ -22,7 +22,7 @@ return {
 			local on_attach = function(client, bufnr)
 				-- This on_attach will apply to lua_ls and any other non-Rust LSPs.
 				local opts = { noremap = true, silent = true, buffer = bufnr }
-				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opts)
 				vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
 				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
 				vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, opts)
@@ -33,8 +33,8 @@ return {
 				callback = function(ev)
 					-- Ensure the attached LSP is not rust-analyzer before applying general keymaps
 					local client = vim.lsp.get_client_by_id(ev.data.client_id)
-					-- 
-						on_attach(client, ev.buf)
+					--
+					on_attach(client, ev.buf)
 				end,
 			})
 			require("lspconfig").rust_analyzer.setup({
