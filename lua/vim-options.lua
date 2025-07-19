@@ -102,6 +102,15 @@ local function open_diagnostics_if_exist()
 		scope = "line",
 		border = "rounded",
 		relative = "editor",
+		format = function(diagnostic)
+			if diagnostic.source == 'rustc'
+					and diagnostic.user_data.lsp.data ~= nil
+			then
+				return diagnostic.user_data.lsp.data.rendered
+			else
+				return diagnostic.message
+			end
+		end,
 	})
 end
 

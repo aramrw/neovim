@@ -33,10 +33,11 @@ return {
 				callback = function(ev)
 					-- Ensure the attached LSP is not rust-analyzer before applying general keymaps
 					local client = vim.lsp.get_client_by_id(ev.data.client_id)
-					-- 
-						on_attach(client, ev.buf)
+					--
+					on_attach(client, ev.buf)
 				end,
 			})
+			require("lspconfig").clangd.setup({})
 			require("lspconfig").rust_analyzer.setup({
 				settings = {
 					["rust-analyzer"] = {

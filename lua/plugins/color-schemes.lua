@@ -151,69 +151,69 @@ local colorschemes = {
 	}
 }
 
-local function extract_title(url)
-	if url then
-		-- Match everything after the last '/'
-		local str = url:match(".*/(.-)$")
-		if str then
-			-- Extract everything up to the first '-' or '.'
-			str = str:match("^[^.]+")
-			return str
-		end
-	end
-end
-
--- lualine themes map to editor themes.
-local lualine_themes = {}
-for i, scheme in ipairs(colorschemes) do
-	-- dont add 'lualine' as a colorscheme
-	if i ~= 1 then
-		local name = extract_title(scheme[1])
-		if name and name ~= "lualine" then
-			lualine_themes[name] = "auto"
-		end
-	end
-end
-
--- overwrite lualine_themes
--- lualine_themes["kanagawa"] = "gruvbox"
-lualine_themes["kanagawa"] = "lackluster"
-lualine_themes["vague"] = "lackluster"
-
--- write the selected color scheme to file
-local function write_colorscheme(colorscheme)
-	local f = io.open(colorscheme_file, "w")
-	if f then
-		f:write(colorscheme)
-		f:close()
-	end
-end
-
--- read the last selected color scheme from file
-local function read_colorscheme()
-	local f = io.open(colorscheme_file, "r")
-	if f then
-		local colorscheme = f:read("*l")
-		f:close()
-		return colorscheme
-	end
-end
-
--- apply selected color scheme &
--- set corresponding lualine theme
-local function apply_colorscheme(choice)
-	vim.cmd.colorscheme(choice)
-	write_colorscheme(choice)
-	local lualine = require('lualine')
-	if lualine then
-		pcall(lualine.setup, {
-			options = {
-				theme = lualine_themes[choice]
-			}
-		})
-	end
-end
-
+-- local function extract_title(url)
+-- 	if url then
+-- 		-- Match everything after the last '/'
+-- 		local str = url:match(".*/(.-)$")
+-- 		if str then
+-- 			-- Extract everything up to the first '-' or '.'
+-- 			str = str:match("^[^.]+")
+-- 			return str
+-- 		end
+-- 	end
+-- end
+--
+-- -- lualine themes map to editor themes.
+-- local lualine_themes = {}
+-- for i, scheme in ipairs(colorschemes) do
+-- 	-- dont add 'lualine' as a colorscheme
+-- 	if i ~= 1 then
+-- 		local name = extract_title(scheme[1])
+-- 		if name and name ~= "lualine" then
+-- 			lualine_themes[name] = "auto"
+-- 		end
+-- 	end
+-- end
+--
+-- -- overwrite lualine_themes
+-- -- lualine_themes["kanagawa"] = "gruvbox"
+-- lualine_themes["kanagawa"] = "lackluster"
+-- lualine_themes["vague"] = "lackluster"
+--
+-- -- write the selected color scheme to file
+-- local function write_colorscheme(colorscheme)
+-- 	local f = io.open(colorscheme_file, "w")
+-- 	if f then
+-- 		f:write(colorscheme)
+-- 		f:close()
+-- 	end
+-- end
+--
+-- -- read the last selected color scheme from file
+-- local function read_colorscheme()
+-- 	local f = io.open(colorscheme_file, "r")
+-- 	if f then
+-- 		local colorscheme = f:read("*l")
+-- 		f:close()
+-- 		return colorscheme
+-- 	end
+-- end
+--
+-- -- apply selected color scheme &
+-- -- set corresponding lualine theme
+-- local function apply_colorscheme(choice)
+-- 	vim.cmd.colorscheme(choice)
+-- 	write_colorscheme(choice)
+-- 	local lualine = require('lualine')
+-- 	if lualine then
+-- 		pcall(lualine.setup, {
+-- 			options = {
+-- 				theme = lualine_themes[choice]
+-- 			}
+-- 		})
+-- 	end
+-- end
+--
 -- switch to the selected color scheme
 local function select_colorscheme()
 	local scheme_names = {}
@@ -237,17 +237,19 @@ local function select_colorscheme()
 		end
 	end)
 end
+--
+-- -- read and set last selected color scheme on startup
+-- local function persist_colorscheme()
+-- 	local last_colorscheme = read_colorscheme()
+-- 	if last_colorscheme then
+-- 		apply_colorscheme(last_colorscheme)
+-- 	end
+-- end
+--
+-- vim.schedule(persist_colorscheme)
+-- -- select and switch color schemes
+-- vim.keymap.set('n', '<leader>cs', select_colorscheme, { noremap = true, silent = true })
+--
+return colorschemes;
 
--- read and set last selected color scheme on startup
-local function persist_colorscheme()
-	local last_colorscheme = read_colorscheme()
-	if last_colorscheme then
-		apply_colorscheme(last_colorscheme)
-	end
-end
-
-vim.schedule(persist_colorscheme)
--- select and switch color schemes
-vim.keymap.set('n', '<leader>cs', select_colorscheme, { noremap = true, silent = true })
-
-return colorschemes
+-- return {}

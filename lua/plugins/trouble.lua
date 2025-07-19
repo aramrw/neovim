@@ -3,7 +3,7 @@ return {
 	cmd = "Trouble",
 	config = function()
 		require("trouble").setup({
-			follow = false,
+			follow = true,
 			focus = true,
 			open_no_results = true,
 			modes = {
@@ -15,7 +15,7 @@ return {
 						border = "rounded",
 						title = "Diagnostics",
 						title_pos = "left",
-						size = { width = 0.8, height = 0.5 },
+						size = { width = 0.8, height = 0.95 },
 						zindex = 200,
 						wrap = true,
 					},
