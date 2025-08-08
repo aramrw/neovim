@@ -49,7 +49,7 @@ local toggle_terminal = function()
 		if vim.bo[state.floating.buf].buftype ~= "terminal" then
 			vim.cmd.terminal()
 		end
-		vim.cmd.startinsert()  -- Enter terminal mode
+		vim.cmd.startinsert() -- Enter terminal mode
 
 		vim.api.nvim_create_autocmd("BufWipeout", {
 			buffer = state.floating.buf,
@@ -70,12 +70,12 @@ local nvimconfigpath = vim.fn.stdpath("config");
 if (os == "Windows_NT") then
 	vim.opt["shell"] = nvimconfigpath .. "\\bin\\shell\\shell-win.exe";
 elseif (os == "Linux") then
-	-- vim.opt["shell"] = nvimconfigpath .. "/bin/shell/shell-linux";
+	vim.opt["shell"] = "nu";
 end
 
 -- Example usage:
 -- Create a floating window with default dimensions
 vim.api.nvim_create_user_command("Floaterminal", toggle_terminal, {})
-vim.keymap.set({"n", "t"}, "<c-l>", toggle_terminal)
+vim.keymap.set({ "n", "t" }, "<c-l>", toggle_terminal)
 
 return {}

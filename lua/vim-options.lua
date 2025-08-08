@@ -55,7 +55,7 @@ end
 vim.cmd [[
 augroup highlight_yank
 autocmd!
-au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=200})
+au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=300})
 augroup END
 ]]
 
@@ -157,3 +157,12 @@ vim.api.nvim_create_autocmd('BufRead', {
 		})
 	end,
 })
+
+vim.opt.list = true
+vim.opt.listchars = {
+  tab = '│ ',
+  trail = '·',
+  extends = '»',
+  precedes = '«',
+  nbsp = '⣿',
+}
