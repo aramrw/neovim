@@ -8,7 +8,8 @@ source $"($nu.home-path)/.cargo/env.nu"
 # source ~/.config/nushell/theme.nu
 
 # scripts
-source "./scripts/random.nu"
+source "scripts/random.nu"
+source "scripts/yazi.nu"
 
 # env
 source "./env.nu"
