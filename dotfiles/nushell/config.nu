@@ -5,7 +5,7 @@ const HOME = $nu.home-path;
 source $"($nu.home-path)/.cargo/env.nu"
 
 # theme
-# source ~/.config/nushell/theme.nu
+source "scripts/theme.nu"
 
 # scripts
 source "scripts/random.nu"
