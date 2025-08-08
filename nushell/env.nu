@@ -1,1 +1,0 @@
-$env.yazi = "~/.config/yazi";

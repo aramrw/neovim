@@ -11,7 +11,7 @@ vim.api.nvim_create_user_command("Aramrw", function(opts)
 	local target = opts.args
 	if target ~= "nu source" then return end
 
-	local nvim_nu_config = DOTCONFIG .. "/nushell/config.nu"
+	local nvim_nu_config = DOTCONFIG .. "/dotfiles/nushell/config.nu"
 	local actual_nu_config = HOME .. "/.config/nushell/config.nu"
 	local actual_nu_dir = HOME .. "/.config/nushell"
 
