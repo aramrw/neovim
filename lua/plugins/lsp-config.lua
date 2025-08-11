@@ -38,10 +38,11 @@ return {
 				end,
 			})
 			require("lspconfig").clangd.setup({})
+			require("lspconfig").gopls.setup({})
 			require("lspconfig").rust_analyzer.setup({
 				settings = {
 					["rust-analyzer"] = {
-						check = { command = "clippy" },
+						-- check = { command = "clippy" },
 						cargo = {
 							extraEnv = { RUSTUP_TOOLCHAIN = "nightly" },
 							features = "all",

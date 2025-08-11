@@ -46,18 +46,18 @@ return {
 			}
 		})
 	end,
-	keys = {
-		["<cr>"] = "jump_close",
-		{
-			"<S-m>",
-			"<cmd>Trouble diagnostic_float toggle<cr>",
-			"Diagnostics",
-		},
-		-- {
-		-- 	"<leader>gr",
-		-- 	"<cmd>Trouble references_float toggle<cr>",
-		-- 	"References",
-		-- }
-	},
+	-- keys = {
+	-- 	["<cr>"] = "jump_close",
+	-- 	{
+	-- 		"<S-m>",
+	-- 		"<cmd>Trouble diagnostic_float toggle<cr>",
+	-- 		"Diagnostics",
+	-- 	},
+	-- 	-- {
+	-- 	-- 	"<leader>gr",
+	-- 	-- 	"<cmd>Trouble references_float toggle<cr>",
+	-- 	-- 	"References",
+	-- 	-- }
+	-- },
 
 }

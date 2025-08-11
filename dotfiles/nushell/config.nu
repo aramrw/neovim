@@ -10,6 +10,7 @@ source "scripts/theme.nu"
 # scripts
 source "scripts/random.nu"
 source "scripts/yazi.nu"
+# source "scripts/hyprland-wallpaper.nu"
 
 # env
 source "./env.nu"

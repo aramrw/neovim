@@ -1,10 +1,16 @@
-#!/usr/bin/env nu
+# Get the directory where this script is located
+let script_dir = $env.FILE_PWD
 
-# Define the directory where your wallpapers are stored
-let WALLPAPER_DIR = ".././dotfiles/hyprland/wallpapers"
+# Define the wallpaper directory relative to the script's location
+let WALLPAPER_DIR = ".././hyprland/wallpapers"
 
-# Get a random wallpaper from the directory
-let wallpaper = ls $WALLPAPER_DIR | random
+# List the wallpapers and select a random one
+let wallpaper = ls $WALLPAPER_DIR | get path | random
 
-# Copy the selected wallpaper to the location Hyprland uses
-cp $wallpaper.path /usr/share/hypr/wall0.png
+# Check if a wallpaper was found and copy it to the desired location
+if not ($wallpaper | is-empty) {
+    cp $wallpaper /usr/share/hypr/wall0.png
+} else {
+    print -e $"No wallpapers found in ($WALLPAPER_DIR)"
+}
+
