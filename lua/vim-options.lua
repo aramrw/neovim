@@ -1,3 +1,5 @@
+local os = vim.loop.os_uname().sysname;
+
 -- set tab width to 2 instead of 4
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
@@ -32,54 +34,28 @@ vim.cmd("tnoremap <leader>bd <C-\\><C-n>:bd!<cr>")
 -- relative line numbers
 vim.wo.relativenumber = true
 
-vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
-vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
-
-local function open_diagnostics_if_exist()
-	-- Get diagnostics for the current buffer
-	local diagnostics = vim.diagnostic.get()
-
-	-- Return early if there are no diagnostics
-	if #diagnostics == 0 then
-		return
-	end
-
-	-- Open a floating diagnostic window if there are diagnostics
-	vim.diagnostic.open_float(nil, {
-		scope = "line",
-		border = "rounded",
-		relative = "editor",
-		format = function(diagnostic)
-			if diagnostic.source == 'rustc'
-					and diagnostic.user_data.lsp.data ~= nil
-			then
-				return diagnostic.user_data.lsp.data.rendered
-			else
-				return diagnostic.message
-			end
-		end,
-	})
+if (os == "Windows_NT") then
+	vim.cmd("nnoremap <C-Right> :wincmd w<CR>")
+	vim.cmd("nnoremap <C-Left> :wincmd W<CR>")
 end
 
--- Map a key to the diagnostics
-vim.keymap.set('n', '<Enter>', open_diagnostics_if_exist, { noremap = true, silent = true })
 
 local options = {
-  smartindent = true,
-  splitbelow = true,
-  splitright = true,
-  signcolumn = "yes",
+	smartindent = true,
+	splitbelow = true,
+	splitright = true,
+	signcolumn = "yes",
 }
 
 for k, v in pairs(options) do
-  vim.opt[k] = v
+	vim.opt[k] = v
 end
 
 -- hightlight yank
 vim.cmd [[
 augroup highlight_yank
 autocmd!
-au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=200})
+au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=300})
 augroup END
 ]]
 
@@ -99,3 +75,94 @@ vim.cmd([[
 --     au BufWinEnter ?* silent! loadview 1
 --   augroup END
 -- ]])
+
+for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
+	local default_diagnostic_handler = vim.lsp.handlers[method]
+	vim.lsp.handlers[method] = function(err, result, context, config)
+		-- Check if error exists before accessing its properties
+		if err and (err.code == -32802 or err.code == -32603) then
+			return
+		end
+		return default_diagnostic_handler(err, result, context, config)
+	end
+end
+
+local function open_diagnostics_if_exist()
+	-- Get diagnostics for the current buffer
+	local diagnostics = vim.diagnostic.get()
+
+	-- Return early if there are no diagnostics
+	if #diagnostics == 0 then
+		return
+	end
+
+	-- Open a floating diagnostic window if there are diagnostics.
+	-- We have removed the custom `format` function.
+	vim.diagnostic.open_float(nil, {
+		scope = "line",
+		border = "rounded",
+		relative = "editor",
+		format = function(diagnostic)
+			if diagnostic.source == 'rustc'
+					and diagnostic.user_data.lsp.data ~= nil
+			then
+				return diagnostic.user_data.lsp.data.rendered
+			else
+				return diagnostic.message
+			end
+		end,
+	})
+end
+
+-- Your keymap remains the same
+vim.keymap.set('n', '<CR>', open_diagnostics_if_exist, { noremap = true, silent = true, desc = "Show Diagnostics" })
+
+-- remember last cursor position in files
+vim.api.nvim_create_autocmd('BufRead', {
+	callback = function(opts)
+		vim.api.nvim_create_autocmd('BufWinEnter', {
+			once = true,
+			buffer = opts.buf,
+			callback = function()
+				local ft = vim.bo[opts.buf].filetype
+				local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
+				if
+						not (ft:match('commit') and ft:match('rebase'))
+						and last_known_line > 1
+						and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+				then
+					vim.api.nvim_feedkeys([[g`"]], 'nx', false)
+				end
+			end,
+		})
+	end,
+})
+
+vim.api.nvim_create_autocmd('BufRead', {
+	callback = function(opts)
+		vim.api.nvim_create_autocmd('BufWinEnter', {
+			once = true,
+			buffer = opts.buf,
+			callback = function()
+				local ft = vim.bo[opts.buf].filetype
+				local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
+				if
+						not (ft:match('commit') and ft:match('rebase'))
+						and last_known_line > 1
+						and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+				then
+					vim.api.nvim_feedkeys([[g`"]], 'nx', false)
+				end
+			end,
+		})
+	end,
+})
+
+vim.opt.list = true
+vim.opt.listchars = {
+  tab = '│ ',
+  trail = '·',
+  extends = '»',
+  precedes = '«',
+  nbsp = '⣿',
+}

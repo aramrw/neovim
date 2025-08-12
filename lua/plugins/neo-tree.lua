@@ -5,14 +5,28 @@ return {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",
 		"MunifTanjim/nui.nvim",
-		"3rd/image.nvim",
+		-- "3rd/image.nvim",
 	},
 	config = function()
 		require("neo-tree").setup({
+			filesystem = {
+				filtered_items = {
+					visible = true, -- This is what you want: If you set this to `true`, all "hide" just mean "dimmed out"
+					hide_dotfiles = true,
+					hide_gitignored = true,
+				},
+			},
 			window = {
 				position = "left",
 				width = 27,
-			}
+			},
+			commands = {
+				delete = function(state)
+					local path = state.tree:get_node().path
+					vim.fn.system({ "trashy", vim.fn.fnameescape(path) })
+					require("neo-tree.sources.manager").refresh(state.name)
+				end,
+			},
 		})
 		vim.keymap.set("n", "<C-n>", ":Neotree toggle reveal_force_cwd left<CR>", {})
 		vim.keymap.set("n", "<leader>bf", ":Neotree buffers reveal float<CR>", {})

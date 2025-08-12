@@ -1,0 +1,6 @@
+[font]
+size = 14.5
+normal = { family = "CaskaydiaCoveNerdFont" }
+
+[terminal]
+shell = { program = "nu" }

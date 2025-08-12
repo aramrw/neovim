@@ -1,0 +1,198 @@
+/* --- Kanagawa Dragon Color Palette (Modified) --- */
+@define-color bg #181616;
+/* dragonBlack3 */
+@define-color fg #c5c9c5;
+/* dragonWhite */
+@define-color red #c4746e;
+/* dragonRed */
+@define-color yellow #c4b28a;
+/* dragonYellow */
+@define-color green #87a987;
+/* dragonGreen */
+@define-color cyan #8ea4a2;
+/* dragonAqua */
+@define-color magenta #8992a7;
+/* dragonViolet */
+@define-color gray #625e5a;
+/* dragonBlack6 */
+
+* {
+	font-family: "CaskaydiaCove Nerd Font", "Font Awesome 6 Free",
+		"Font Awesome 6 Free Solid";
+	font-size: 10px;
+}
+
+window#waybar {
+	/* `otf-font-awesome` is required to be installed for icons */
+	font-family: FontAwesome, monospace;
+	background-color: transparent;
+	border-bottom: 0px;
+	color: @fg;
+	transition-property: background-color;
+	transition-duration: .5s;
+}
+
+window#waybar.hidden {
+	opacity: 0.2;
+}
+
+window#waybar.empty #window {
+	background-color: transparent;
+}
+
+.modules-right {
+	margin: 2px 2px 0 0;
+}
+
+.modules-center {
+	margin: 2px 0 0 0;
+}
+
+.modules-left {
+	margin: 2px 0 0 2px;
+}
+
+button {
+	border: none;
+}
+
+#workspaces {
+	background-color: @bg;
+	margin-right: 5px;
+}
+
+#workspaces button {
+	padding: 0 5px;
+	background-color: transparent;
+	color: @fg;
+	border-radius: 0;
+}
+
+/* #workspaces button:first-child { */
+/*   border-radius: 5px 0 0 5px; */
+/* } */
+/* #workspaces button:last-child { */
+/*   border-radius: 0 5px 5px 0; */
+/* } */
+
+#workspaces button:hover {
+	color: @yellow;
+}
+
+/* highlight current hypr workspace */
+#workspaces button.active {
+	background-color: @red;
+}
+
+#workspaces button.urgent {
+	background-color: @magenta;
+}
+
+/* #idle_inhibitor, */
+/* #cava, */
+/* #scratchpad, */
+/* #mode, */
+/* #window, */
+#clock,
+/* #battery, */
+/* #backlight, */
+/* #wireplumber, */
+#tray,
+#mpris,
+#load {
+	padding: 0 10px;
+	background-color: @cyan;
+	color: @fg;
+}
+
+/* #pulseaudio, */
+/* #backlight, */
+/* #network, */
+#cpu,
+#memory,
+#temperature,
+#battery,
+#disk,
+#custom-uptime,
+#custom-updates,
+#tray {
+	border-left: 1.4px solid @gray;
+	padding: 0 7px;
+	opacity: 0.8;
+}
+
+#network {
+	padding: 0 8px 0 8px;
+}
+
+#mode {
+	background-color: @green;
+	color: @bg;
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left>widget:first-child>#workspaces {
+	margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right>widget:last-child>#workspaces {
+	margin-right: 0;
+}
+
+#cava {
+	padding: 0 5px;
+}
+
+#battery.charging,
+#battery.plugged {
+	background-color: @green;
+	color: @bg;
+}
+
+@keyframes blink {
+	to {
+		background-color: @bg;
+		color: @fg;
+	}
+}
+
+/* Using steps() instead of linear as a timing function to limit cpu usage */
+#battery.critical:not(.charging) {
+	background-color: @red;
+	color: @fg;
+	animation-name: blink;
+	animation-duration: 0.5s;
+	animation-timing-function: steps(12);
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+label:focus {
+	background-color: #000000;
+}
+
+#wireplumber.muted {
+	background-color: @cyan;
+}
+
+#tray>.passive {
+	-gtk-icon-effect: dim;
+}
+
+#tray>.needs-attention {
+	-gtk-icon-effect: highlight;
+}
+
+#mpris.playing {
+	background-color: @yellow;
+	color: @bg;
+}
+
+#tray menu {
+	font-family: sans-serif;
+}
+
+#scratchpad.empty {
+	background: transparent;
+}

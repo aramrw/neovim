@@ -1,132 +1,59 @@
 return {
 	{
-		"williamboman/mason.nvim",
-		config = function()
-			require("mason").setup(
-				{ PATH = "append" }
-			)
-		end
+		"mason-org/mason.nvim",
+		opts = {},
 	},
+
 	{
 		"williamboman/mason-lspconfig.nvim",
-		config = function()
-			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"lua_ls",
-					"tailwindcss",
-					"clangd",
-					"emmet_language_server",
-					"jsonls",
-					"taplo",
-					"html",
-					"svelte"
-				},
-			})
-		end,
+		dependencies = { "mason-org/mason.nvim" },
+		opts = {
+			-- this is enabled by default
+			automatic_enable = false,
+			ensure_installed = { "lua_ls" },
+		},
 	},
+
+	-- 3. nvim-lspconfig, with the critical addition.
 	{
 		"neovim/nvim-lspconfig",
-		lazy = false,
 		config = function()
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-			local lspconfig = require("lspconfig")
-			-- sometimes looks for the lsp in the wrong directory.
-			-- solved by adding an absolute path to the language servers that fail regularly.
-			local bin_path = "C:/Users/arami/AppData/Local/nvim-data/mason/bin/"
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities,
-				cmd = { bin_path .. "lua-language-server.cmd" },
-				on_init = function(client)
-					local path = client.workspace_folders[1].name
-					if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-						return
-					end
-
-					client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-						runtime = {
-							version = 'LuaJIT'
-						},
-						-- Make the server aware of Neovim runtime files
-						workspace = {
-							checkThirdParty = true,
-							library = vim.api.nvim_get_runtime_file("", true)
-						}
-					})
+			-- This defines global LSP behavior (keymaps, etc.)
+			local on_attach = function(client, bufnr)
+				-- This on_attach will apply to lua_ls and any other non-Rust LSPs.
+				local opts = { noremap = true, silent = true, buffer = bufnr }
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
+				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+				vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, opts)
+			end
+			-- Set up a global autocommand for the on_attach function.
+			vim.api.nvim_create_autocmd('LspAttach', {
+				group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+				callback = function(ev)
+					-- Ensure the attached LSP is not rust-analyzer before applying general keymaps
+					local client = vim.lsp.get_client_by_id(ev.data.client_id)
+					--
+					on_attach(client, ev.buf)
 				end,
-				settings = {
-					Lua = {}
-				}
 			})
-			lspconfig.rust_analyzer.setup({
-				capabilities = capabilities,
-				-- cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\nightly-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
-				cmd = { "C:\\Users\\arami\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\rust-analyzer.exe" },
+			require("lspconfig").clangd.setup({})
+			require("lspconfig").gopls.setup({})
+			require("lspconfig").taplo.setup({})
+			require("lspconfig").rust_analyzer.setup({
 				settings = {
 					["rust-analyzer"] = {
-						check = {
-							command = "clippy",
+						-- check = { command = "clippy" },
+						cargo = {
+							extraEnv = { RUSTUP_TOOLCHAIN = "nightly" },
+							features = "all",
 						},
-						extraArgs = {
-							"--",
-							"--no-deps",
-							"-Dclippy::correctness",
-							"-Dclippy::complexity",
-							"-Wclippy::perf",
-							"-Wclippy::pedantic",
-							"-Wclippy::nursery",
-						},
-						procMacro = {
-							enable = true,
-						},
-						diagnostics = {
-							useRustcErrorCode = { enable = true },
-							styleLints = { enable = true },
-							experimental = { enable = true },
-						}
+						procMacro = { enable = true },
 					},
 				},
 			})
-			lspconfig.clangd.setup({
-				capabilities = capabilities,
-				cmd = {
-					"clangd",
-					"--background-index",
-					"--clang-tidy",
-					"--header-insertion=iwyu",
-					"--completion-style=detailed",
-					"--function-arg-placeholders",
-					"--fallback-style=llvm",
-					"--offset-encoding=utf-16",
-				},
-			})
-			lspconfig.tailwindcss.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.emmet_language_server.setup({
-				capabilities = capabilities,
-				cmd = { bin_path .. 'emmet-language-server', '--stdio' },
-			})
-			lspconfig.jsonls.setup({
-				capabilities = capabilities,
-				cmd = { bin_path .. 'vscode-json-language-server', '--stdio' },
-			})
-			lspconfig.html.setup({
-				capabilities = capabilities,
-				cmd = { bin_path .. 'vscode-html-language-server', '--stdio' },
-			})
-			lspconfig.svelte.setup({
-				capabilities = capabilities,
-				cmd = { bin_path .. 'svelteserver', '--stdio' },
-			})
-			lspconfig.taplo.setup({
-				capabilities = capabilities,
-				cmd = { bin_path .. 'taplo', 'lsp', 'stdio' },
-			})
-			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
-			vim.keymap.set({ "n" }, "<leader>gf", vim.lsp.buf.format, {})
-			-- vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			-- vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
+			-- Now, manually set up the servers we DO want lspconfig to manage.
+			require("lspconfig").lua_ls.setup({})
 		end,
 	},
 }

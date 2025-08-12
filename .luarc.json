@@ -1,5 +1,7 @@
 {
     "diagnostics.globals": [
-        "vim"
+        "vim",
+        "delete_shada_folder",
+        "write_config_nu"
     ]
 }
