@@ -2,45 +2,51 @@ local colorscheme_file = vim.fn.stdpath('data') .. '/colorscheme'
 -- plugin setup
 local colorschemes = {
 	{
-		'nvim-lualine/lualine.nvim',
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
-			local lualine = require('lualine')
-			-- Now don't forget to initialize lualine
-			lualine.setup({
+			require('lualine').setup {
 				options = {
-					theme = 'auto', -- or any theme you like
+					theme = 'lackluster',
 					component_separators = { left = '│', right = '│' },
-					section_separators = { left = '', right = '' },
+					section_separators = { left = '', right = '' },
 				},
 				sections = {
+					-- Left-aligned components
 					lualine_a = { 'mode' },
-					lualine_b = {},
+					lualine_b = { 'branch' },
 					lualine_c = {
 						{
-							'filename',
-							path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
-							shorting_target = 40,
+							'diagnostics',
+							sections = { 'error', 'warn' },           -- Only show errors and warnings
+							symbols = { error = ' ', warn = ' ' },
 						}
 					},
-					lualine_x = { 'filetype' },
+
+					-- Right-aligned components
+					lualine_x = {},
 					lualine_y = {},
-					lualine_z = {}
+					lualine_z = {
+						{
+							'filename',
+							path = 2,           -- 2 = absolute path
+						}
+					}
 				},
 				inactive_sections = {
 					lualine_a = {},
 					lualine_b = {},
-					lualine_c = {
-						{
-							'filename',
-							path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
-							shorting_target = 40,
-						}
-					},
+					lualine_c = {},
 					lualine_x = {},
 					lualine_y = {},
-					lualine_z = {}
+					lualine_z = {
+						{
+							'filename',
+							path = 2,
+						}
+					}
 				}
-			})
+			}
 		end
 	},
 	{

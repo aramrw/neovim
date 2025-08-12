@@ -18,4 +18,6 @@ source "./env.nu"
 # alias
 alias cfg.term = nvim $env.term
 
+#completions
+source "./scripts/completions/mod.nu"
 

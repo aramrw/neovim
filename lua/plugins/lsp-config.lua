@@ -39,6 +39,7 @@ return {
 			})
 			require("lspconfig").clangd.setup({})
 			require("lspconfig").gopls.setup({})
+			require("lspconfig").taplo.setup({})
 			require("lspconfig").rust_analyzer.setup({
 				settings = {
 					["rust-analyzer"] = {
