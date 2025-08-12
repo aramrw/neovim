@@ -22,8 +22,8 @@ return {
 					colorscheme = {
 						enable_preview = true
 					},
-					-- This is the only change to disable the preview for diagnostics
 					diagnostics = {
+						-- disable the preview for diagnostics
 						previewer = false,
 					},
 				},

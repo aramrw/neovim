@@ -6,7 +6,41 @@ local colorschemes = {
 		config = function()
 			local lualine = require('lualine')
 			-- Now don't forget to initialize lualine
-			lualine.setup({})
+			lualine.setup({
+				options = {
+					theme = 'auto', -- or any theme you like
+					component_separators = { left = '│', right = '│' },
+					section_separators = { left = '', right = '' },
+				},
+				sections = {
+					lualine_a = { 'mode' },
+					lualine_b = {},
+					lualine_c = {
+						{
+							'filename',
+							path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
+							shorting_target = 40,
+						}
+					},
+					lualine_x = { 'filetype' },
+					lualine_y = {},
+					lualine_z = {}
+				},
+				inactive_sections = {
+					lualine_a = {},
+					lualine_b = {},
+					lualine_c = {
+						{
+							'filename',
+							path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
+							shorting_target = 40,
+						}
+					},
+					lualine_x = {},
+					lualine_y = {},
+					lualine_z = {}
+				}
+			})
 		end
 	},
 	{
