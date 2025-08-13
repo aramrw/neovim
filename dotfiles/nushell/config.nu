@@ -21,3 +21,4 @@ alias cfg.term = nvim $env.term
 #completions
 source "./scripts/completions/mod.nu"
 
+$env.PATH = ($env.PATH | prepend '~/roc_nightly-linux_x86_64-2025-03-22-c47a8e9')

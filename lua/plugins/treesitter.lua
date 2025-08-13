@@ -13,9 +13,10 @@ return {
 		-- vim.treesitter.language.register("rust", "rhai")
 		vim.filetype.add {
 			extension = {
-				rhai = "rhai",
+				ppr = "ppr",
 			}
 		}
 		vim.treesitter.language.register("rust", "rhai")
+		vim.treesitter.language.register("rust", "ppr")
 	end,
 }

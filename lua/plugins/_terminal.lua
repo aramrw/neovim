@@ -1,4 +1,6 @@
-vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
+
+-- get out of terminal mode
+-- vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
 local os = vim.loop.os_uname().sysname;
 
 local state = {
