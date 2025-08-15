@@ -1,22 +1,26 @@
--- In your lazy.nvim plugins file
 return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
 	config = function()
 		-- Your standard nvim-treesitter setup.
 		require("nvim-treesitter.configs").setup({
-			ensure_installed = { "lua", "rust" },
+			ensure_installed = { "lua", "rust", "python" },
 			auto_install = true,
 			highlight = { enable = true },
 			indent = { enable = true },
 		})
-		-- vim.treesitter.language.register("rust", "rhai")
+
+		-- Set up the custom filetype as 'p' (not 'rust')
 		vim.filetype.add {
 			extension = {
-				ppr = "ppr",
+				p = "p",
 			}
 		}
-		vim.treesitter.language.register("rust", "rhai")
-		vim.treesitter.language.register("rust", "ppr")
+
+		-- Now, register the 'rust' parser to handle the 'p' filetype.
+		-- This is the key to getting Rust-like syntax highlighting
+		-- without setting the filetype to 'rust'.
+		vim.treesitter.language.register("rust", "p")
 	end,
 }
+

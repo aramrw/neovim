@@ -26,7 +26,9 @@ vim.cmd("nnoremap <c-s> :w<cr>")
 
 -- set <leader>bd to close buffer
 vim.cmd("nnoremap <leader>bd :bd!<cr>")
--- vim.cmd("tnoremap <leader>bd <C-\\><C-n>:bd!<cr>")
+
+-- terminal mode escape
+vim.keymap.set("t", "<ESC><ESC>", "<C-\\><C-n>")
 
 -- disable copilot on startup
 -- vim.cmd([[ autocmd VimEnter * Copilot disable ]])
