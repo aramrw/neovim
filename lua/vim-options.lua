@@ -1,9 +1,9 @@
 local os = vim.loop.os_uname().sysname;
 
--- set tab width to 2 instead of 4
-vim.cmd("set tabstop=2")
-vim.cmd("set softtabstop=2")
-vim.cmd("set shiftwidth=2")
+-- set tab width 
+vim.cmd("set tabstop=3")
+vim.cmd("set softtabstop=3")
+vim.cmd("set shiftwidth=3")
 -- set line numbers
 vim.cmd("set number")
 -- set smart case search
@@ -29,6 +29,9 @@ vim.cmd("nnoremap <leader>bd :bd!<cr>")
 
 -- terminal mode escape
 vim.keymap.set("t", "<ESC><ESC>", "<C-\\><C-n>")
+
+-- rename
+vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
 
 -- disable copilot on startup
 -- vim.cmd([[ autocmd VimEnter * Copilot disable ]])

@@ -18,7 +18,7 @@ local colorschemes = {
 					lualine_c = {
 						{
 							'diagnostics',
-							sections = { 'error', 'warn' },           -- Only show errors and warnings
+							sections = { 'error', 'warn' }, -- Only show errors and warnings
 							symbols = { error = ' ', warn = ' ' },
 						}
 					},
@@ -29,7 +29,7 @@ local colorschemes = {
 					lualine_z = {
 						{
 							'filename',
-							path = 2,           -- 2 = absolute path
+							path = 2, -- 2 = absolute path
 						}
 					}
 				},
@@ -48,6 +48,28 @@ local colorschemes = {
 				}
 			}
 		end
+	},
+	{
+		'everviolet/nvim',
+		name = 'evergarden',
+		priority = 1000,
+		opts = {
+			theme = {
+				variant = 'winter', -- 'winter'|'fall'|'spring'|'summer'
+				accent = 'red',
+			},
+			editor = {
+				transparent_background = false,
+				sign = { color = 'none' },
+				float = {
+					color = 'mantle',
+					solid_border = false,
+				},
+				completion = {
+					color = 'surface0',
+				},
+			},
+		}
 	},
 	{
 		"rebelot/kanagawa.nvim",
@@ -92,15 +114,15 @@ local colorschemes = {
 		config = function()
 			require("posterpole").setup({
 				transparent = true,
-				colorless_bg = false,       -- grayscale or not
-				dim_inactive = false,       -- highlight inactive splits
-				brightness = 0,             -- negative numbers - darker, positive - lighter
+				colorless_bg = false,   -- grayscale or not
+				dim_inactive = false,   -- highlight inactive splits
+				brightness = 0,         -- negative numbers - darker, positive - lighter
 				selected_tab_highlight = false, --highlight current selected tab
-				fg_saturation = 0,          -- font saturation, gray colors become more brighter
-				bg_saturation = 30,         -- background saturation
+				fg_saturation = 0,      -- font saturation, gray colors become more brighter
+				bg_saturation = 30,     -- background saturation
 				colors = {
-					posterpole = {},          -- { mainRed = "#550000" }
-					posterpole_term = {},     -- { mainRed = 95 }
+					posterpole = {},     -- { mainRed = "#550000" }
+					posterpole_term = {}, -- { mainRed = 95 }
 				},
 			})
 		end

@@ -2,7 +2,8 @@ $env.config.show_banner = false
 $env.config.buffer_editor = "nvim"
 $env.EDITOR = "nvim"
 const HOME = $nu.home-path;
-source $"($nu.home-path)/.cargo/env.nu"
+
+$env.PATH = ($env.PATH | append '~/.cargo/bin')
 
 # theme
 source "scripts/theme.nu"
